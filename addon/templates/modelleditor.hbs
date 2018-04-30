@@ -5,27 +5,32 @@
 
 <div class="canvas">
 
-  <p> Hello </p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+  
+ <div>
+    <span>Timestamp:</span> {{model.timestamp}}<br>
+    {{#each model.systems as |system|}}
+	  <span>Systemnamen: </span> {{system.name}}<br>
+    {{/each}}
+	  <span>Errors: </span> {{model.exceptions}}<br>
+  </div>
+
 </div>
 <div class="buttonMenu">
 	<div class="buttonContainer">
-  		<button onclick="addNode()">New Node</button>
-  		<button onclick="addNodegroup()">New Nodegroup</button>
-  		<button onclick="communication()">Communication</button>
+  		<button {{action 'newNode' model}}>New Node</button>
+  		<button {{action 'newNodegroup'}}>New Nodegroup</button>
+  		<button {{action 'addCommunication'}}>Communication</button>
   	</div>
 </div>
 
 
-<script>
-  function addNode(){
-    alert('addNODE!');
-  }
 
-  function addNodegroup(){
-    alert('addNODEGROUP!');
-  }
 
-  function communication(){
-    alert('Communication!');
-  }
-</script>
