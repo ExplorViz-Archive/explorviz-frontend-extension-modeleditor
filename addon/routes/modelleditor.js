@@ -17,28 +17,39 @@ export default BaseRoute.extend(AuthenticatedRouteMixin, {
 	},
   actions: {
     // @Override BaseRoute
-	newNode(landscape){
+    //adds a new node to a nodegroup 'nodegroup' with the name 'name'
+	newSystem(landscape){
 		store: service();
 
-		const system1 = this.get('store').createRecord('system', {
-			"name": "bla-keks",
+		const system = this.get('store').createRecord('system', {
+			"name": document.getElementById("nNN").value,
 			"parent": landscape  
-	  	});
-	  	const system2 = this.get('store').createRecord('system', {
-			"name": "bla-kekse",
-			"parent": landscape 
-	  	});
-
-		const systems = [system1, system2]
-
-
-		//landscape.systems = [system1, system2];	
+	  	});	
+	  	system.save();
 	},
 	
-	newNodegroup(){
-		alert('das wird schonmal gemacht! actions sind einfach das Beste!');
-		
+	newNodegroup(landscape){
+		store: service();
+		console.log(landscape.timestamp);
+		console.log(landscape.system.name);
+
+		const nodeGroup = this.get('store').createRecord('nodegroup', {
+			"name": document.getElementById("nNgN"),
+			"parent": landscape.systems
+	  	});
+
 	},
+
+	newNode(nodegroup){
+		store: service();
+		
+		const node = this.get('store').createRecord('node', {
+			"name": document.getElementById("nNN"),
+			"parent": nodegroup  
+	  	});
+
+	},
+
 	
     resetRoute() {
       // your cleanup code here
