@@ -18,10 +18,10 @@
     <span>Timestamp:</span> {{model.timestamp}}<br>
     {{#each model.systems as |system|}}
 	  <span>Systemnamen: </span> {{system.name}}<br>
-      {{#each model.systems.nodegroup as |nodegroup|}}
+      {{#each system.nodegroups as |nodegroup|}}
       <span>Nodegroup: </span> {{nodegroup.name}}<br>
-        {{#each nodegroup.node as |node|}}
-        <span>Node: </span> {{system.name}}<br>    
+        {{#each nodegroup.nodes as |node|}}
+        <span>Node: </span> {{node.name}}<br>    
         {{/each}}
       {{/each}}
     {{/each}}

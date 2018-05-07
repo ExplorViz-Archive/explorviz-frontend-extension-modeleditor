@@ -13,6 +13,7 @@ export default BaseRoute.extend(AuthenticatedRouteMixin, {
 		  "timestamp": 12345,
 		  "exceptions": "this works exceptionally idkw2"
 	  });
+	  landscape.save();
 	  return landscape;
 	},
   actions: {
@@ -22,7 +23,7 @@ export default BaseRoute.extend(AuthenticatedRouteMixin, {
 		store: service();
 
 		const system = this.get('store').createRecord('system', {
-			"name": document.getElementById("nNN").value,
+			"name": document.getElementById("nSN").value,
 			"parent": landscape  
 	  	});	
 	  	system.save();
@@ -31,11 +32,11 @@ export default BaseRoute.extend(AuthenticatedRouteMixin, {
 	newNodegroup(landscape){
 		store: service();
 		console.log(landscape.timestamp);
-		console.log(landscape.system.name);
+		console.log(landscape.systems);
 
 		const nodeGroup = this.get('store').createRecord('nodegroup', {
 			"name": document.getElementById("nNgN"),
-			"parent": landscape.systems
+			"parent": landscape.systems[0]
 	  	});
 
 	},
