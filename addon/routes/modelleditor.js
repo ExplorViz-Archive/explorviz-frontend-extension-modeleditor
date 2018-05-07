@@ -81,7 +81,7 @@ export default BaseRoute.extend(AuthenticatedRouteMixin, {
 				if(system[i].get('nodegroups').objectAt(j).name == document.getElementById("nNgN").value){
 					nodegroup[i][nodegroupArrayPointer] = system[i].get('nodegroups').objectAt(j);
 					nodegroupArrayPointer++;
-					console.log("nodegroup gesetzt")
+					console.log("nodegroup gesetzt");
 				}		
 			}
 		}
