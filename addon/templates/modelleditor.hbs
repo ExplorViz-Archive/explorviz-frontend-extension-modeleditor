@@ -17,13 +17,17 @@
  <div>
     <span>Timestamp:</span> {{model.timestamp}}<br>
     {{#each model.systems as |system|}}
-	  <span>Systemnamen: </span> {{system.name}}<br>
+	  <span>Systemname: </span> {{system.name}}<br>
+      <ul>
       {{#each system.nodegroups as |nodegroup|}}
-      <span>Nodegroup: </span> {{nodegroup.name}}<br>
-        {{#each nodegroup.nodes as |node|}}
-        <span>Node: </span> {{node.name}}<br>    
+        <li><span>Nodegroup: </span> {{nodegroup.name}}<br></li>
+          <ul>
+          {{#each nodegroup.nodes as |node|}}
+          <li><span>Node: </span> {{node.name}}<br></li>
+          {{/each}}
+          </ul>
         {{/each}}
-      {{/each}}
+      </ul>
     {{/each}}
 	  <span>Errors: </span> {{model.exceptions}}<br>
   </div>
