@@ -205,6 +205,22 @@ export default BaseRoute.extend(AlertifyHandler, {
 		
 	},
 
+	delete(landscape){
+		//if there is a system by the name of System remove it
+		let deleted = false;
+		const landscapeRecord = this.get('controller.model');
+		for(let i=0; i < landscapeRecord.get('systems').length;i++){
+			if(landscapeRecord.get('systems').objectAt(i).name === document.getElementById('nSN').value){
+				landscapeRecord.get('systems').removeObject(landscapeRecord.get('systems').objectAt(i));
+				deleted = true;
+				break;
+			}
+		}
+		if(deleted == false){
+			this.showAlertifyMessage("There is no system called " + document.getElementById('nSN').value + " , therefor no system can be deleted.");
+		}
+	},
+
 	
     resetRoute() {
       // your cleanup code here
