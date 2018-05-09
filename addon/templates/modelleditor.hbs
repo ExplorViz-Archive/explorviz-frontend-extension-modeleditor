@@ -4,32 +4,38 @@
 
 
 <div class="canvas">
+<!-- {{modeleditor-visualization}}  -->
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-  
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
  <div>
     <span>Timestamp:</span> {{model.timestamp}}<br>
     {{#each model.systems as |system|}}
-	  <span>Systemname: </span> {{system.name}}<br>
+    <span>Systemname: </span> {{system.name}}<br>
       <ul>
       {{#each system.nodegroups as |nodegroup|}}
         <li><span>Nodegroup: </span> {{nodegroup.name}}<br></li>
           <ul>
           {{#each nodegroup.nodes as |node|}}
           <li><span>Node: </span> {{node.name}}<br></li>
+            <ul>
+              {{#each node.applications as |app|}}
+              <li><span>Application: </span> {{app.name}}</li>
+              {{/each}}
+            </ul>
           {{/each}}
           </ul>
         {{/each}}
       </ul>
     {{/each}}
-	  <span>Errors: </span> {{model.exceptions}}<br>
+    <span>Errors: </span> {{model.exceptions}}<br>
   </div>
 
 </div>
@@ -41,6 +47,8 @@
       <button {{action 'newNodegroup' model}}>New Nodegroup</button><br>
   		<input id="nNN" value="newNodeName">
       <button {{action 'newNode' model}}>New Node</button><br>
+      <input id="nAN" value="newApplicationName">
+      <button {{action 'newApplication' model}}>New Application</button><br>
   	</div>
 </div>
 
