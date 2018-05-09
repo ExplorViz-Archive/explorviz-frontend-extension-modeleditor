@@ -185,7 +185,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 		if(nodegroupfound == true){
 			for(let k = 0; k < nodegroup.get('nodes').length; k++){	
-				foundDouble = false;
 				for(let h = 0; h < nodegroup.get('nodes').objectAt(k).get('applications').length; h++){
 					if(nodegroup.get('nodes').objectAt(k).get('applications').objectAt(h).name === document.getElementById('nAN').value){
 						this.showAlertifyMessage("There is already an application named " + document.getElementById('nAN').value + " in that nodegroup.");
@@ -200,7 +199,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						"parent": node
 					});
 					node.get('applications').addObject(app);
-				}
+				}else{break;}
 			}
 			
 		}
@@ -214,3 +213,4 @@ export default BaseRoute.extend(AlertifyHandler, {
   }
 
 });
+

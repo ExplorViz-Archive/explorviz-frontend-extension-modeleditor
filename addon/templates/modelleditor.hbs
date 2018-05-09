@@ -42,15 +42,43 @@
 <div class="buttonMenu">
 	<div class="buttonContainer">
       <input id="nSN" value="newSystemName">
-      <button {{action 'newSystem' model}}>New System</button><br>
+      <button id="bNSN" {{action 'newSystem' model}}>New System</button><br>
       <input id="nNgN" value="newNodegroupName">
-      <button {{action 'newNodegroup' model}}>New Nodegroup</button><br>
+      <button id="bNNgN" {{action 'newNodegroup' model}}>New Nodegroup</button><br>
   		<input id="nNN" value="newNodeName">
-      <button {{action 'newNode' model}}>New Node</button><br>
+      <button id="bNNN" {{action 'newNode' model}}>New Node</button><br>
       <input id="nAN" value="newApplicationName">
-      <button {{action 'newApplication' model}}>New Application</button><br>
+      <button id="bNAN" {{action 'newApplication' model}}>New Application</button><br>
   	</div>
 </div>
 
 
+<script>
+  document.getElementById("nSN").addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("bNSN").click();
+    }
+  });
 
+    document.getElementById("nNgN").addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("bNNgN").click();
+    }
+  });
+
+      document.getElementById("nNN").addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("bNNN").click();
+    }
+  });
+
+  document.getElementById("nAN").addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        document.getElementById("bNAN").click();
+    }
+  });
+</script>
