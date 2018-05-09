@@ -118,7 +118,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 						});
 						nodegroup.get('nodes').addObject(node);
 						for(let h = 0; h < nodegroup.get('nodes').objectAt(0).get('applications').length; h++){
-							console.log("yeah");
 							const app = this.get('store').createRecord('application',{
 								"name": nodegroup.get('nodes').objectAt(0).get('applications').objectAt(h).name,
 								"parent": node
