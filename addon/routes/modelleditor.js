@@ -2,17 +2,17 @@ import BaseRoute from 'explorviz-frontend/routes/base-route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import {inject as service} from '@ember/service';
 import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
+//import Jsonapi from 'explorviz-frontend/app/storagemodel/jsonapi';
 
 
 export default BaseRoute.extend(AlertifyHandler, {
-
 
 	model() {
 	  store: service();
 
 	  const landscape = this.get('store').createRecord('landscape',{
-		  "timestamp": 12345,
-		  "exceptions": "this works exceptionally idkw2"
+		  "id":42,
+		  "timestamp": 42
 	  });
 	  landscape.save();
 	  return landscape;
@@ -38,7 +38,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				"parent": landscape  
 			});	
 			this.get('controller.model.systems').addObject(system);
-			system.save();
+			landscape.save();
 		}
 	},
 	
@@ -68,6 +68,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					"parent": system
 			  		});
 					system.get('nodegroups').addObject(nodeGroup);
+					landscape.save();
 					changed = true;
 					break;
 				}
@@ -123,6 +124,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 								"parent": node
 							});
 							node.get('applications').addObject(app);
+							landscape.save();
 						}
 						changed = true;
 						break;
@@ -198,6 +200,9 @@ export default BaseRoute.extend(AlertifyHandler, {
 						"parent": node
 					});
 					node.get('applications').addObject(app);
+					landscape.save({
+
+					});
 				}else{break;}
 			}
 			
