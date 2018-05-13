@@ -4,7 +4,6 @@
 
 
 <div class="canvas">
-<!-- {{modeleditor-visualization}}  -->
 
  <br>
  <br>
@@ -41,6 +40,8 @@
 </div>
 <div class="buttonMenu">
 	<div class="buttonContainer">
+      <input id="nMN" type=number value="42">
+      <button id="bNMN" {{action 'newModel' model}}>New Model</button><br>
       <input id="nSN" value="newSystemName">
       <button id="bNSN" {{action 'newSystem' model}}>New System</button><br>
       <input id="nNgN" value="newNodegroupName">

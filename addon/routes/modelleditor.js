@@ -14,12 +14,21 @@ export default BaseRoute.extend(AlertifyHandler, {
 		  "id":42,
 		  "timestamp": 42
 	  });
+
+	  const adapterOptions = {filename:"filenametest"};
+
 	  landscape.save();
 	  return landscape;
 	},
   actions: {
     // @Override BaseRoute
     //
+    newModel(landscape){
+    	//TODO: find the name in document.getElementById('nMN').value and set it to the model timestamp!
+
+    },
+
+
 	newSystem(landscape){
 		store: service();
 
@@ -32,7 +41,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				break;
 			}
 		}
-		if(foundDouble == false){
+		if(foundDouble === false){
 			const system = this.get('store').createRecord('system', {
 				"name": document.getElementById("nSN").value,
 				"parent": landscape  
@@ -61,7 +70,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						break;
 					}
 				}
-				if(foundDouble == false){
+				if(foundDouble === false){
 					const system = landscapeRecord.get('systems').objectAt(i);
 					const nodeGroup = this.get('store').createRecord('nodegroup', {
 					"name": document.getElementById("nNgN").value,
@@ -112,7 +121,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 							break;
 						}
 					}
-					if(foundDouble == false){
+					if(foundDouble === false){
 						const node = this.get('store').createRecord('node', {
 							"name": document.getElementById("nNN").value,
 							"parent": nodegroup
@@ -184,7 +193,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 			this.send('newApplication', landscape);
 		}
 
-		if(nodegroupfound == true){
+		if(nodegroupfound === true){
 			for(let k = 0; k < nodegroup.get('nodes').length; k++){	
 				for(let h = 0; h < nodegroup.get('nodes').objectAt(k).get('applications').length; h++){
 					if(nodegroup.get('nodes').objectAt(k).get('applications').objectAt(h).name === document.getElementById('nAN').value){
@@ -193,7 +202,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						break;
 					}
 				}
-				if(foundDouble == false){
+				if(foundDouble === false){
 					const node = nodegroup.get('nodes').objectAt(k);
 					const app = this.get('store').createRecord('application', {
 						"name": document.getElementById("nAN").value,
@@ -221,7 +230,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				break;
 			}
 		}
-		if(deleted == false){
+		if(deleted === false){
 			this.showAlertifyMessage("There is no system called " + document.getElementById('nSN').value + " , therefor no system can be deleted.");
 		}
 	},
