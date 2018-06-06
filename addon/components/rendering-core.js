@@ -36,7 +36,7 @@ export default Component.extend(Evented, THREEPerformance, {
   viewImporter: service("view-importer"),
 
   reloadHandler: service("reload-handler"),
-  landscapeRepo: service("repos/landscape-repository"),
+  landscapeRepo: service("repos/modell-repository"),
   renderingService: service(),
 
   classNames: ['viz'],
@@ -195,7 +195,7 @@ export default Component.extend(Evented, THREEPerformance, {
       const state = {};
 
       // get timestamp
-      state.timestamp = self.get('landscapeRepo.latestLandscape')
+      state.timestamp = self.get('landscapeRepo.modellLandscape')
         .get('timestamp');
 
       // get latestApp, may be null
@@ -233,7 +233,7 @@ export default Component.extend(Evented, THREEPerformance, {
    */
   computeLandscapeCondition(){
 
-    const systems = this.get('landscapeRepo.latestLandscape').get('systems');
+    const systems = this.get('landscapeRepo.modellLandscape').get('systems');
     const condition = [];
 
     systems.forEach(function(system) {
@@ -439,11 +439,11 @@ export default Component.extend(Evented, THREEPerformance, {
           window.setTimeout(
             function() {
               // Wait until landscape is loaded
-              if(self.get('landscapeRepo.latestLandscape') === null){
+              if(self.get('landscapeRepo.modellLandscape') === null){
                 waitForLandscape();
               }
               // Fulfill promise
-              else if(self.get('landscapeRepo.latestLandscape')){
+              else if(self.get('landscapeRepo.modellLandscape')){
                 resolve();
               }
             }, 500);
@@ -456,7 +456,7 @@ export default Component.extend(Evented, THREEPerformance, {
             self.applyAppCondition(self.get('landscapeRepo.latestApplication'));
           }
           else{
-            self.applyLandscapeCondition(self.get('landscapeRepo.latestLandscape'));
+            self.applyLandscapeCondition(self.get('landscapeRepo.modellLandscape'));
           }
         });
     }

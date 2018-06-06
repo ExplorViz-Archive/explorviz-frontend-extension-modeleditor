@@ -10,6 +10,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 	model() {
 	  store: service();
 
+
 	  const landscape = this.get('store').createRecord('landscape',{
 		  "id":42,
 		  "timestamp": 42
