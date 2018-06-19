@@ -425,14 +425,16 @@ export default Component.extend(Evented, THREEPerformance, {
     const timestamp = this.get('newState').timestamp;
     const appID = this.get('newState').appID;
 
-    if(timestamp) {
-      self.get('reloadHandler').loadLandscapeById(timestamp, appID);
-      waitForLandscape();
-    }
+    //if(timestamp) {
+      //self.get('reloadHandler').loadLandscapeById(timestamp, appID);
+      //waitForLandscape();
+      //self.get('landscapeRepo.modellLandscape');
+
+//    }
 
     self.set('initImport',true);
 
-    function waitForLandscape() {
+  /*  function waitForLandscape() {
       // New Promise
       var promise = new Promise(
         function(resolve) {
@@ -460,6 +462,7 @@ export default Component.extend(Evented, THREEPerformance, {
           }
         });
     }
+    */
   },
 
   /**

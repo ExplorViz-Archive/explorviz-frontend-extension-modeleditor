@@ -7,18 +7,20 @@ import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 
 export default BaseRoute.extend(AlertifyHandler, {
 
-	model() {
-	  store: service();
+	modellRepo: service('modell-repository'),
+	store: service(),
 
+	model() {
 
 	  const landscape = this.get('store').createRecord('landscape',{
-		  "id":42,
-		  "timestamp": 42
+		  "timestamp": 42,
+		  "id":42
 	  });
 
 	  const adapterOptions = {filename:"filenametest"};
 
 	  landscape.save();
+	  this.set('modellRepo.modellLandscape', landscape);
 	  return landscape;
 	},
   actions: {
@@ -31,8 +33,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 
 	newSystem(landscape){
-		store: service();
-
 		let foundDouble = false;
 		
 		for(let i =0 ; i < this.get('controller.model.systems').length;i++){
@@ -49,11 +49,11 @@ export default BaseRoute.extend(AlertifyHandler, {
 			});	
 			this.get('controller.model.systems').addObject(system);
 			landscape.save();
+			this.set('modellRepo.modellLandscape', landscape);
 		}
 	},
 	
 	newNodegroup(landscape){
-		store: service();
 
 		let foundDouble = false;
 
@@ -79,6 +79,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 			  		});
 					system.get('nodegroups').addObject(nodeGroup);
 					landscape.save();
+					this.set('modellRepo.modellLandscape', landscape);
 					changed = true;
 					break;
 				}
@@ -92,7 +93,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 	},
 
 	newNode(landscape){
-		store: service();
 		
 		const landscapeRecord = this.get('controller.model');
 		
@@ -135,6 +135,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 							});
 							node.get('applications').addObject(app);
 							landscape.save();
+							this.set('modellRepo.modellLandscape', landscape);
 						}
 						changed = true;
 						break;
@@ -155,7 +156,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 	},
 
 	newApplication(landscape){
-		store: service();
 		
 		const landscapeRecord = this.get('controller.model');
 		
@@ -210,9 +210,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 						"parent": node
 					});
 					node.get('applications').addObject(app);
-					landscape.save({
-
-					});
+					landscape.save();
+					this.set('modellRepo.modellLandscape', landscape);
 				}else{break;}
 			}
 			

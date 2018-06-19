@@ -11,9 +11,9 @@ import Service from '@ember/service';
 export default Service.extend(AlertifyHandler, {
 
 store: service('store'),
-mergedRepo: service('modell-repository'),
+modellRepo: service('modell-repository'),
 
-
+//one doesn't need timestamps or a modell from the backend so this whole function is not necessary ?
   receiveMergedLandscape(timestamps){
     const self = this;
 
