@@ -36,7 +36,7 @@ export default Component.extend(Evented, THREEPerformance, {
   viewImporter: service("view-importer"),
 
   reloadHandler: service("reload-handler"),
-  landscapeRepo: service("repos/modell-repository"),
+  modellRepo: service("modell-repository"),
   renderingService: service(),
 
   classNames: ['viz'],
@@ -195,11 +195,11 @@ export default Component.extend(Evented, THREEPerformance, {
       const state = {};
 
       // get timestamp
-      state.timestamp = self.get('landscapeRepo.modellLandscape')
+      state.timestamp = self.get('modellRepo.modellLandscape')
         .get('timestamp');
 
       // get latestApp, may be null
-      const latestMaybeApp = self.get('landscapeRepo.latestApplication');
+      const latestMaybeApp = self.get('modellRepo.modellApplication');
       state.appID = latestMaybeApp ? latestMaybeApp.get('id') : null;
 
       state.camX = self.get('camera').position.x;
@@ -209,8 +209,8 @@ export default Component.extend(Evented, THREEPerformance, {
       if(state.appID){
         self.set('appCondition',[]);
         self.computeAppCondition(
-          self.get('landscapeRepo.latestApplication').get('components'),
-          self.get('landscapeRepo.latestApplication').get('clazzes'));
+          self.get('modellRepo.modellApplication').get('components'),
+          self.get('modellRepo.modellApplication').get('clazzes'));
         state.appCondition = self.get('appCondition');
       }
       else{
@@ -221,7 +221,7 @@ export default Component.extend(Evented, THREEPerformance, {
       self.get('urlBuilder').transmitState(state);
     });
 
-    this.get('landscapeRepo').on("updated", function() {
+    this.get('modellRepo').on("updated", function() {
       self.onUpdated();
     });
 
@@ -233,7 +233,7 @@ export default Component.extend(Evented, THREEPerformance, {
    */
   computeLandscapeCondition(){
 
-    const systems = this.get('landscapeRepo.modellLandscape').get('systems');
+    const systems = this.get('modellRepo.modellLandscape').get('systems');
     const condition = [];
 
     systems.forEach(function(system) {
@@ -478,7 +478,10 @@ export default Component.extend(Evented, THREEPerformance, {
    *
    * @method populateScene
    */
-  populateScene() {},
+  populateScene() {
+
+    console.log("now populate!");
+  },
 
 
   /**
@@ -520,6 +523,7 @@ export default Component.extend(Evented, THREEPerformance, {
    * @method cleanAndUpdateScene
    */
   cleanAndUpdateScene() {
+    console.log("WHAT?");
     const scene = this.get('scene');
 
     removeAllChildren(scene);

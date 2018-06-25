@@ -8,6 +8,7 @@ import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 export default BaseRoute.extend(AlertifyHandler, {
 
 	modellRepo: service('modell-repository'),
+	landscapeRepo: service('repos/landscape-repository'),
 	store: service(),
 
 	model() {
@@ -125,7 +126,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 					if(foundDouble === false){
 						const node = this.get('store').createRecord('node', {
 							"name": document.getElementById("nNN").value,
-							"parent": nodegroup
+							"parent": nodegroup,
+							"ipAddress": "0.0.0.0"
 						});
 						nodegroup.get('nodes').addObject(node);
 						for(let h = 0; h < nodegroup.get('nodes').objectAt(0).get('applications').length; h++){
@@ -207,7 +209,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 					const node = nodegroup.get('nodes').objectAt(k);
 					const app = this.get('store').createRecord('application', {
 						"name": document.getElementById("nAN").value,
-						"parent": node
+						"parent": node,
+						"programmingLanguage": "java"
 					});
 					node.get('applications').addObject(app);
 					landscape.save();
