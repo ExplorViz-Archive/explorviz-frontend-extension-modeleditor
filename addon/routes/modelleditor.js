@@ -10,18 +10,21 @@ export default BaseRoute.extend(AlertifyHandler, {
 	modellRepo: service('modell-repository'),
 	landscapeRepo: service('repos/landscape-repository'),
 	store: service(),
+	renderingService: service("rendering-service"),
 
 	model() {
 
 	  const landscape = this.get('store').createRecord('landscape',{
-		  "timestamp": 42,
-		  "id":42
+		  "timestamp": Math.floor(Math.random() * 100000),
+		  "id": Math.floor(Math.random() * 10000)
 	  });
 
 	  const adapterOptions = {filename:"filenametest"};
 
-	  landscape.save();
-	  this.set('modellRepo.modellLandscape', landscape);
+	  ////landscape.save();
+	  if(!this.get('modellRepo.modellLandscape')) {
+	  		this.set('modellRepo.modellLandscape', landscape);
+		}
 	  return landscape;
 	},
   actions: {
@@ -46,26 +49,27 @@ export default BaseRoute.extend(AlertifyHandler, {
 		if(foundDouble === false){
 			const system = this.get('store').createRecord('system', {
 				"name": document.getElementById("nSN").value,
-				"parent": landscape  
+				"parent": landscape,
+				"id": Math.floor(Math.random() * 10000)
 			});	
 			this.get('controller.model.systems').addObject(system);
-			landscape.save();
+			////landscape.save();
+			landscape.get('systems').addObject(system);
 			this.set('modellRepo.modellLandscape', landscape);
+			this.get('renderingService').reSetupScene();
 		}
 	},
 	
 	newNodegroup(landscape){
 
 		let foundDouble = false;
-
-		const landscapeRecord = this.get('controller.model');
 		
 		let changed = false;
 
-		for(let i = 0; i < landscapeRecord.get('systems').length; i++){
-			if(landscapeRecord.get('systems').objectAt(i).name === document.getElementById("nSN").value){
-				for(let j = 0 ; j < landscapeRecord.get('systems').objectAt(i).get('nodegroups').length; j++){
-					if(landscapeRecord.get('systems').objectAt(i).get('nodegroups').objectAt(j).name === document.getElementById('nNgN').value){
+		for(let i = 0; i < landscape.get('systems').length; i++){
+			if(landscape.get('systems').objectAt(i).name === document.getElementById("nSN").value){
+				for(let j = 0 ; j < landscape.get('systems').objectAt(i).get('nodegroups').length; j++){
+					if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).name === document.getElementById('nNgN').value){
 						this.showAlertifyMessage("You cannot have two nodegroups within one system that have the exact same name.");
 						foundDouble = true;
 						changed = true;
@@ -73,15 +77,18 @@ export default BaseRoute.extend(AlertifyHandler, {
 					}
 				}
 				if(foundDouble === false){
-					const system = landscapeRecord.get('systems').objectAt(i);
+					const system = landscape.get('systems').objectAt(i);
 					const nodeGroup = this.get('store').createRecord('nodegroup', {
 					"name": document.getElementById("nNgN").value,
-					"parent": system
+					"parent": system,
+					"id": Math.floor(Math.random() * 10000)
 			  		});
 					system.get('nodegroups').addObject(nodeGroup);
-					landscape.save();
+
+					//landscape.save();
 					this.set('modellRepo.modellLandscape', landscape);
 					changed = true;
+					this.get('renderingService').reSetupScene();
 					break;
 				}
 			}
@@ -95,7 +102,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 	newNode(landscape){
 		
-		const landscapeRecord = this.get('controller.model');
+		const landscapeRecord = landscape;
 		
 		let changed = false;
 		let systemfound = false;
@@ -127,17 +134,21 @@ export default BaseRoute.extend(AlertifyHandler, {
 						const node = this.get('store').createRecord('node', {
 							"name": document.getElementById("nNN").value,
 							"parent": nodegroup,
-							"ipAddress": "0.0.0.0"
+							"ipAddress": "0.0.0.0",
+							"id": Math.floor(Math.random() * 10000)
 						});
 						nodegroup.get('nodes').addObject(node);
 						for(let h = 0; h < nodegroup.get('nodes').objectAt(0).get('applications').length; h++){
 							const app = this.get('store').createRecord('application',{
 								"name": nodegroup.get('nodes').objectAt(0).get('applications').objectAt(h).name,
-								"parent": node
+								"parent": node,
+								"programmingLanguage": "Java",
+								"id": Math.floor(Math.random() * 10000)
 							});
 							node.get('applications').addObject(app);
-							landscape.save();
+							//landscape.save();
 							this.set('modellRepo.modellLandscape', landscape);
+							this.get('renderingService').reSetupScene();
 						}
 						changed = true;
 						break;
@@ -210,11 +221,13 @@ export default BaseRoute.extend(AlertifyHandler, {
 					const app = this.get('store').createRecord('application', {
 						"name": document.getElementById("nAN").value,
 						"parent": node,
-						"programmingLanguage": "java"
+						"programmingLanguage": "Java",
+						"id": Math.floor(Math.random() * 10000)
 					});
 					node.get('applications').addObject(app);
-					landscape.save();
+					//landscape.save();
 					this.set('modellRepo.modellLandscape', landscape);
+					this.get('renderingService').reSetupScene();
 				}else{break;}
 			}
 			

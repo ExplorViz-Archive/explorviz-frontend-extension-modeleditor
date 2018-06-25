@@ -15,8 +15,8 @@
  <br>
  <br>
  <div>
-    <span>Timestamp:</span> {{model.timestamp}}<br>
-    {{#each model.systems as |system|}}
+    <span>Timestamp:</span> {{modellRepo.modellLandscape.timestamp}}<br>
+    {{#each modellRepo.modellLandscape.systems as |system|}}
     <span>Systemname: </span> {{system.name}}<br>
       <ul>
       {{#each system.nodegroups as |nodegroup|}}
@@ -41,17 +41,17 @@
 <div class="buttonMenu">
 	<div class="buttonContainer">
       <input id="nMN" type=number value="42">
-      <button id="bNMN" {{action 'newModel' model}}>New Model</button><br>
+      <button id="bNMN" {{action 'newModel' modellRepo.modellLandscape}}>New Model</button><br>
       <input id="nSN" value="newSystemName">
-      <button id="bNSN" {{action 'newSystem' model}}>New System</button><br>
+      <button id="bNSN" {{action 'newSystem' modellRepo.modellLandscape}}>New System</button><br>
       <input id="nNgN" value="newNodegroupName">
-      <button id="bNNgN" {{action 'newNodegroup' model}}>New Nodegroup</button><br>
+      <button id="bNNgN" {{action 'newNodegroup' modellRepo.modellLandscape}}>New Nodegroup</button><br>
   		<input id="nNN" value="newNodeName">
-      <button id="bNNN" {{action 'newNode' model}}>New Node</button><br>
+      <button id="bNNN" {{action 'newNode' modellRepo.modellLandscape}}>New Node</button><br>
       <input id="nAN" value="newApplicationName">
-      <button id="bNAN" {{action 'newApplication' model}}>New Application</button><br>
+      <button id="bNAN" {{action 'newApplication' modellRepo.modellLandscape}}>New Application</button><br>
       <br>
-      <button id="bD" {{action 'delete' model}}>Delete System</button><br>
+      <button id="bD" {{action 'delete' modellRepo.modellLandscape}}>Delete System</button><br>
   	</div>
 </div>
 
