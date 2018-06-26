@@ -11,17 +11,21 @@ export default BaseRoute.extend(AlertifyHandler, {
 	landscapeRepo: service('repos/landscape-repository'),
 	store: service(),
 	renderingService: service("rendering-service"),
+	//idCounter will count upward only and tell us which ID is to be used next, there shouldn't be too much difficulty as to hyperthreading and multithreading in JS 
+	//but there are IDs which are used by the backend to monitor the latestLandscape which should not be used again to have unique IDs so that is why we start with a high value in ID 
+	//TODO: find a way to have a semiglobal variable
+	//let idCounter = 10000,
 
 	model() {
 
 	  const landscape = this.get('store').createRecord('landscape',{
 		  "timestamp": Math.floor(Math.random() * 100000),
-		  "id": Math.floor(Math.random() * 10000)
+		  "id": Math.floor(Math.random() * 100000 + 10000)
 	  });
 
 	  const adapterOptions = {filename:"filenametest"};
 
-	  ////landscape.save();
+	  landscape.save();
 	  if(!this.get('modellRepo.modellLandscape')) {
 	  		this.set('modellRepo.modellLandscape', landscape);
 		}
@@ -50,10 +54,10 @@ export default BaseRoute.extend(AlertifyHandler, {
 			const system = this.get('store').createRecord('system', {
 				"name": document.getElementById("nSN").value,
 				"parent": landscape,
-				"id": Math.floor(Math.random() * 10000)
+				"id": Math.floor(Math.random() * 100000 + 10000)
 			});	
 			this.get('controller.model.systems').addObject(system);
-			////landscape.save();
+			landscape.save();
 			landscape.get('systems').addObject(system);
 			this.set('modellRepo.modellLandscape', landscape);
 			this.get('renderingService').reSetupScene();
@@ -81,11 +85,11 @@ export default BaseRoute.extend(AlertifyHandler, {
 					const nodeGroup = this.get('store').createRecord('nodegroup', {
 					"name": document.getElementById("nNgN").value,
 					"parent": system,
-					"id": Math.floor(Math.random() * 10000)
+					"id": Math.floor(Math.random() * 100000 + 10000)
 			  		});
 					system.get('nodegroups').addObject(nodeGroup);
 
-					//landscape.save();
+					landscape.save();
 					this.set('modellRepo.modellLandscape', landscape);
 					changed = true;
 					this.get('renderingService').reSetupScene();
@@ -135,7 +139,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 							"name": document.getElementById("nNN").value,
 							"parent": nodegroup,
 							"ipAddress": "0.0.0.0",
-							"id": Math.floor(Math.random() * 10000)
+							"id": Math.floor(Math.random() * 100000 + 10000)
 						});
 						nodegroup.get('nodes').addObject(node);
 						for(let h = 0; h < nodegroup.get('nodes').objectAt(0).get('applications').length; h++){
@@ -143,10 +147,11 @@ export default BaseRoute.extend(AlertifyHandler, {
 								"name": nodegroup.get('nodes').objectAt(0).get('applications').objectAt(h).name,
 								"parent": node,
 								"programmingLanguage": "Java",
-								"id": Math.floor(Math.random() * 10000)
+								"lastUsage": Date.now(),
+								"id": Math.floor(Math.random() * 100000 + 10000)
 							});
 							node.get('applications').addObject(app);
-							//landscape.save();
+							landscape.save();
 							this.set('modellRepo.modellLandscape', landscape);
 							this.get('renderingService').reSetupScene();
 						}
@@ -170,7 +175,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 	newApplication(landscape){
 		
-		const landscapeRecord = this.get('controller.model');
+		const landscapeRecord = landscape;
 		
 		let changed = false;
 		let systemfound = false;
@@ -222,10 +227,11 @@ export default BaseRoute.extend(AlertifyHandler, {
 						"name": document.getElementById("nAN").value,
 						"parent": node,
 						"programmingLanguage": "Java",
-						"id": Math.floor(Math.random() * 10000)
+						"lastUsage": Date.now(),
+						"id": Math.floor(Math.random() * 100000 + 10000)
 					});
 					node.get('applications').addObject(app);
-					//landscape.save();
+					landscape.save();
 					this.set('modellRepo.modellLandscape', landscape);
 					this.get('renderingService').reSetupScene();
 				}else{break;}
@@ -237,21 +243,100 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 	delete(landscape){
 		//if there is a system by the name of System remove it
+		//TODO:overhaul
 		let deleted = false;
-		const landscapeRecord = this.get('controller.model');
-		for(let i=0; i < landscapeRecord.get('systems').length;i++){
-			if(landscapeRecord.get('systems').objectAt(i).name === document.getElementById('nSN').value){
-				landscapeRecord.get('systems').removeObject(landscapeRecord.get('systems').objectAt(i));
+		for(let i=0; i < landscape.get('systems').length;i++){
+			if(landscape.get('systems').objectAt(i).name === document.getElementById('nSN').value){
+				landscape.get('systems').removeObject(landscape.get('systems').objectAt(i));
 				deleted = true;
 				break;
 			}
 		}
 		if(deleted === false){
 			this.showAlertifyMessage("There is no system called " + document.getElementById('nSN').value + " , therefor no system can be deleted.");
+		}else{
+			for(let i=0; i < landscape.get('outgoingApplicationCommunications').length;i++){
+				if(landscape.get('outgoingApplicationCommunications').objectAt(i).sourceApplication === document.getElementById('nSN').value || landscape.get('outgoingApplicationCommunications').objectAt(i).targetApplication === document.getElementById('nSN').value){
+					landscape.get('outgoingApplicationCommunications').removeObject(landscape.get('outgoingApplicationCommunications').objectAt(i));
+				}
+			}
+			this.set('modellRepo.modellLandscape', landscape);
+			this.get('renderingService').reSetupScene();
 		}
 	},
 
-	
+
+	communicationActivate(landscape){
+		let application1 = null;
+		let application2 = null;
+		//find the application1
+		for(let i=0; i<landscape.get('systems').length; i++){
+			if(landscape.get('systems').objectAt(i).name === document.getElementById('cPS1').value){
+				for(let j=0; j<landscape.get('systems').objectAt(i).get('nodegroups').length; j++){
+					if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).name === document.getElementById('cPNG1').value){
+						for(let k =0; k<landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').length; k++){
+							if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).name === document.getElementById('cPN1').value){
+								for(let l=0; l < landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length;l++){
+									if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l).name === document.getElementById('cPA1').value){
+										console.log("GEFUNDEN!");
+										application1 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
+										break;
+									}
+								}
+								break;
+							}
+						}
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		//find application2
+		for(let i=0; i<landscape.get('systems').length; i++){
+			if(landscape.get('systems').objectAt(i).name === document.getElementById('cPS2').value){
+				for(let j=0; j<landscape.get('systems').objectAt(i).get('nodegroups').length; j++){
+					if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).name === document.getElementById('cPNG2').value){
+						for(let k =0; k<landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').length; k++){
+							if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).name === document.getElementById('cPN2').value){
+								for(let l=0; l < landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length;l++){
+									if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l).name === document.getElementById('cPA2').value){
+										console.log("GEFUNDEN2!");
+										application2 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
+										break;
+									}
+								}
+								break;
+							}
+						}
+						break;
+					}
+				}
+				break;
+			}
+		}
+
+		//make them communicate via outgoingApplicationCommunications and inverse: 'sourceApplication'
+		const communication1 = this.get('store').createRecord('applicationcommunication', {
+			"requests": Math.floor(Math.random() * 1000),
+			"averageResponseTime": Math.floor(Math.random() * 50),
+			"id": Math.floor(Math.random() * 100000 + 10000),
+			"technology": "PERL",
+
+			"sourceApplication": application1,
+
+			"targetApplication": application2
+		});
+		application1.get('outgoingApplicationCommunications').addObject(communication1);
+
+		landscape.get('outgoingApplicationCommunications').addObject(communication1);
+
+		landscape.save();
+		this.set('modellRepo.modellLandscape', landscape);
+		this.get('renderingService').reSetupScene();
+	},
+
     resetRoute() {
       // your cleanup code here
     }
