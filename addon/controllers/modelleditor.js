@@ -19,7 +19,7 @@ export default Controller.extend({
   reloadHandler: service("reload-handler"),
   renderingService: service("rendering-service"),
   modellRepo: service('modell-repository'),
-  landscapeRepo: service('repos/landscape-repository'),
+  //landscapeRepo: service('repos/landscape-repository'),
   store: service(),
 
   state: null,
@@ -97,6 +97,42 @@ export default Controller.extend({
     this._super(...arguments);
     this.get('urlBuilder').off('transmitState');
     this.get('viewImporter').off('requestView');
+  },
+
+  clickedEntity(emberRecord) {
+    //switch is not possible because not every model has a comparable member
+    //if emberRecord === application
+    console.log(emberRecord.constructor.modelName);
+    switch(emberRecord.constructor.modelName){
+    	case "application":
+    		document.getElementById('cPS1').value = emberRecord.get('parent').get('parent').get('parent').get('name');		
+    		document.getElementById('cPNG1').value = emberRecord.get('parent').get('parent').get('name');		
+    		document.getElementById('cPN1').value = emberRecord.get('parent').get('name');
+    		document.getElementById('cPA1').value = emberRecord.get('name');		
+    		break;
+		case "node":
+			document.getElementById('cPS1').value = emberRecord.get('parent').get('parent').get('name');		
+    		document.getElementById('cPNG1').value = emberRecord.get('parent').get('name');		
+    		document.getElementById('cPN1').value = emberRecord.get('name');
+    		document.getElementById('cPA1').value = "to be selected";		
+    		break;
+		case "nodegroup":
+			document.getElementById('cPS1').value = emberRecord.get('parent').get('name');		
+    		document.getElementById('cPNG1').value = emberRecord.get('name');		
+    		document.getElementById('cPN1').value = "to be selected";
+    		document.getElementById('cPA1').value = "to be selected";		
+    		break;
+		case "system":
+			document.getElementById('cPS1').value = emberRecord.get('name');		
+    		document.getElementById('cPNG1').value = "to be selected";
+    		document.getElementById('cPN1').value = "to be selected";
+    		document.getElementById('cPA1').value = "to be selected";
+    		break;
+		case "applicationcommunication":
+			this.debug("don't you wanna click on an application?");
+			break;
+
+    }
   }  
   
 });

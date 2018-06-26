@@ -4,39 +4,8 @@
 
 
 <div class="canvas">
-{{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape}}
- <br>
- <br>
- <br>
- <br>
- <br>
- <br>
- <br>
- <br>
- <br>
- <div>
-    <span>Timestamp:</span> {{modellRepo.modellLandscape.timestamp}}<br>
-    {{#each modellRepo.modellLandscape.systems as |system|}}
-    <span>Systemname: </span> {{system.name}}<br>
-      <ul>
-      {{#each system.nodegroups as |nodegroup|}}
-        <li><span>Nodegroup: </span> {{nodegroup.name}}<br></li>
-          <ul>
-          {{#each nodegroup.nodes as |node|}}
-          <li><span>Node: </span> {{node.name}}<br></li>
-            <ul>
-              {{#each node.applications as |app|}}
-              <li><span>Application: </span> {{app.name}}</li>
-              {{/each}}
-            </ul>
-          {{/each}}
-          </ul>
-        {{/each}}
-      </ul>
-    {{/each}}
-    <span>Errors: </span> {{model.exceptions}}<br>
-  </div>
-
+{{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape
+clickedEntity=(action clickedEntity)}}
 </div>
 <div class="buttonMenu">
 	<div class="buttonContainer">
@@ -57,12 +26,13 @@
       <br>
       <br>
       <br>
-      
+      CommunicationPartner1:<br>
       <input id="cPS1" value="newSystemName"><br>
       <input id="cPNG1" value="newNodegroupName"><br>
       <input id="cPN1" value="newNodeName"><br>
       <input id="cPA1" value="newApplicationName"><br>
-      <button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button><br>
+      <button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button><button id="bNAN" {{action 'switchComP'}}>Switch CommunicationPartner</button><br>
+      CommunicationPartner2:<br>
       <input id="cPS2" value="newSystemName"><br>
       <input id="cPNG2" value="newNodegroupName"><br>
       <input id="cPN2" value="newNodeName"><br>

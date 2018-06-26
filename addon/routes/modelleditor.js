@@ -8,7 +8,7 @@ import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 export default BaseRoute.extend(AlertifyHandler, {
 
 	modellRepo: service('modell-repository'),
-	landscapeRepo: service('repos/landscape-repository'),
+	//landscapeRepo: service('repos/landscape-repository'),
 	store: service(),
 	renderingService: service("rendering-service"),
 	//idCounter will count upward only and tell us which ID is to be used next, there shouldn't be too much difficulty as to hyperthreading and multithreading in JS 
@@ -282,14 +282,26 @@ export default BaseRoute.extend(AlertifyHandler, {
 										application1 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
 										break;
 									}
+									else{
+										this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
+									}
 								}
 								break;
+							}
+							else{
+								this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
 							}
 						}
 						break;
 					}
+					else{
+						this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
+					}
 				}
 				break;
+			}
+			else{
+				this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
 			}
 		}
 
@@ -306,14 +318,26 @@ export default BaseRoute.extend(AlertifyHandler, {
 										application2 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
 										break;
 									}
+									else{
+										this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
+									}
 								}
 								break;
+							}
+							else{
+								this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
 							}
 						}
 						break;
 					}
+					else{
+						this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
+					}
 				}
 				break;
+			}
+			else{
+				this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
 			}
 		}
 
@@ -335,6 +359,23 @@ export default BaseRoute.extend(AlertifyHandler, {
 		landscape.save();
 		this.set('modellRepo.modellLandscape', landscape);
 		this.get('renderingService').reSetupScene();
+	},
+
+	switchComP(){
+		let cPS1 = document.getElementById('cPS1').value;
+		let cPNG1 = document.getElementById('cPNG1').value;
+		let cPN1 = document.getElementById('cPN1').value;
+		let cPA1 = document.getElementById('cPA1').value;
+		
+		document.getElementById('cPS1').value = document.getElementById('cPS2').value;
+		document.getElementById('cPNG1').value = document.getElementById('cPNG2').value;
+		document.getElementById('cPN1').value = document.getElementById('cPN2').value;
+		document.getElementById('cPA1').value = document.getElementById('cPA2').value;
+
+		document.getElementById('cPS2').value = cPS1;
+		document.getElementById('cPNG2').value = cPNG1;
+		document.getElementById('cPN2').value = cPN1;
+		document.getElementById('cPA2').value = cPA1;
 	},
 
     resetRoute() {
