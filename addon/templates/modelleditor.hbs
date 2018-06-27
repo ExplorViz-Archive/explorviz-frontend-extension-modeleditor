@@ -4,39 +4,39 @@
 
 
 <div class="canvas">
-{{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape
-clickedEntity=(action clickedEntity)}}
+{{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}
 </div>
 <div class="buttonMenu">
 	<div class="buttonContainer">
-      <input id="nMN" type=number value="42">
-      <button id="bNMN" {{action 'newModel' modellRepo.modellLandscape}}>New Model</button><br>
-      <input id="nSN" value="newSystemName">
-      <button id="bNSN" {{action 'newSystem' modellRepo.modellLandscape}}>New System</button><br>
-      <input id="nNgN" value="newNodegroupName">
-      <button id="bNNgN" {{action 'newNodegroup' modellRepo.modellLandscape}}>New Nodegroup</button><br>
-  		<input id="nNN" value="newNodeName">
-      <button id="bNNN" {{action 'newNode' modellRepo.modellLandscape}}>New Node</button><br>
-      <input id="nAN" value="newApplicationName">
-      <button id="bNAN" {{action 'newApplication' modellRepo.modellLandscape}}>New Application</button><br>
       <br>
-      <button id="bD" {{action 'delete' modellRepo.modellLandscape}}>Delete System</button><br>
+      &emsp;<input id="nMN" type=number value="42">
+      &emsp;<button id="bNMN" {{action 'newModel' modellRepo.modellLandscape}}>New Model</button><br>
+      &emsp;<input id="nSN" value="newSystemName">
+      &emsp;<button id="bNSN" {{action 'newSystem' modellRepo.modellLandscape}}>New System</button><br>
+      &emsp;<input id="nNgN" value="newNodegroupName">
+      &emsp;<button id="bNNgN" {{action 'newNodegroup' modellRepo.modellLandscape}}>New Nodegroup</button><br>
+      &emsp;<input id="nNN" value="newNodeName">
+      &emsp;<button id="bNNN" {{action 'newNode' modellRepo.modellLandscape}}>New Node</button><br>
+      &emsp;<input id="nAN" value="newApplicationName">
+      &emsp;<button id="bNAN" {{action 'newApplication' modellRepo.modellLandscape}}>New Application</button><br>
       <br>
-      <br>
-      <br>
+      &emsp;<button id="bD" {{action 'delete' modellRepo.modellLandscape}}>Delete System</button><br>
       <br>
       <br>
-      CommunicationPartner1:<br>
-      <input id="cPS1" value="newSystemName"><br>
-      <input id="cPNG1" value="newNodegroupName"><br>
-      <input id="cPN1" value="newNodeName"><br>
-      <input id="cPA1" value="newApplicationName"><br>
-      <button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button><button id="bNAN" {{action 'switchComP'}}>Switch CommunicationPartner</button><br>
-      CommunicationPartner2:<br>
-      <input id="cPS2" value="newSystemName"><br>
-      <input id="cPNG2" value="newNodegroupName"><br>
-      <input id="cPN2" value="newNodeName"><br>
-      <input id="cPA2" value="newApplicationName"><br>
+      <br>
+      <br>
+      <br>
+      &emsp;CommunicationPartner1:<br>
+      &emsp;<input id="cPS1" value="newSystemName"><br>
+      &emsp;<input id="cPNG1" value="newNodegroupName"><br>
+      &emsp;<input id="cPN1" value="newNodeName"><br>
+      &emsp;<input id="cPA1" value="newApplicationName"><br><br>
+      &emsp;<button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button>&emsp;<button id="bNAN" {{action 'switchComP'}}>Switch Partner</button><br><br>
+      &emsp;CommunicationPartner2:<br>
+      &emsp;<input id="cPS2" value="newSystemName"><br>
+      &emsp;<input id="cPNG2" value="newNodegroupName"><br>
+      &emsp;<input id="cPN2" value="newNodeName"><br>
+      &emsp;<input id="cPA2" value="newApplicationName"><br>
       
   	</div>
 </div>

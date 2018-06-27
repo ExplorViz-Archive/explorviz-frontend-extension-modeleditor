@@ -60,7 +60,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 			landscape.save();
 			landscape.get('systems').addObject(system);
 			this.set('modellRepo.modellLandscape', landscape);
-			this.get('renderingService').reSetupScene();
+			this.get('renderingService').redrawScene();
 		}
 	},
 	
@@ -92,7 +92,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					landscape.save();
 					this.set('modellRepo.modellLandscape', landscape);
 					changed = true;
-					this.get('renderingService').reSetupScene();
+					this.get('renderingService').redrawScene();
 					break;
 				}
 			}
@@ -153,7 +153,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 							node.get('applications').addObject(app);
 							landscape.save();
 							this.set('modellRepo.modellLandscape', landscape);
-							this.get('renderingService').reSetupScene();
+							this.get('renderingService').redrawScene();
 						}
 						changed = true;
 						break;
@@ -216,7 +216,9 @@ export default BaseRoute.extend(AlertifyHandler, {
 			for(let k = 0; k < nodegroup.get('nodes').length; k++){	
 				for(let h = 0; h < nodegroup.get('nodes').objectAt(k).get('applications').length; h++){
 					if(nodegroup.get('nodes').objectAt(k).get('applications').objectAt(h).name === document.getElementById('nAN').value){
-						this.showAlertifyMessage("There is already an application named " + document.getElementById('nAN').value + " in that nodegroup.");
+						let string = document.getElementById('nAN').value;
+						string = string.bold();
+						this.showAlertifyMessage("There is already an application named " + string + " in that nodegroup.");
 						foundDouble = true;
 						break;
 					}
@@ -233,7 +235,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					node.get('applications').addObject(app);
 					landscape.save();
 					this.set('modellRepo.modellLandscape', landscape);
-					this.get('renderingService').reSetupScene();
+					this.get('renderingService').redrawScene();
 				}else{break;}
 			}
 			
@@ -246,22 +248,28 @@ export default BaseRoute.extend(AlertifyHandler, {
 		//TODO:overhaul
 		let deleted = false;
 		for(let i=0; i < landscape.get('systems').length;i++){
-			if(landscape.get('systems').objectAt(i).name === document.getElementById('nSN').value){
+			if(landscape.get('systems').objectAt(i).get('name') === document.getElementById('nSN').value){
 				landscape.get('systems').removeObject(landscape.get('systems').objectAt(i));
 				deleted = true;
 				break;
 			}
 		}
 		if(deleted === false){
-			this.showAlertifyMessage("There is no system called " + document.getElementById('nSN').value + " , therefor no system can be deleted.");
+			let string = document.getElementById('nSN').value;
+			string = string.bold();
+			this.showAlertifyMessage("There is no system called " + string + " , therefor no system can be deleted.");
 		}else{
+			console.log(landscape.get('outgoingApplicationCommunications').length);
 			for(let i=0; i < landscape.get('outgoingApplicationCommunications').length;i++){
-				if(landscape.get('outgoingApplicationCommunications').objectAt(i).sourceApplication === document.getElementById('nSN').value || landscape.get('outgoingApplicationCommunications').objectAt(i).targetApplication === document.getElementById('nSN').value){
+				if(landscape.get('outgoingApplicationCommunications').objectAt(i).get('sourceApplication').get('parent').get('parent').get('parent').get('name') === document.getElementById('nSN').value || landscape.get('outgoingApplicationCommunications').objectAt(i).get('targetApplication').get('parent').get('parent').get('parent').get('name') === document.getElementById('nSN').value){
 					landscape.get('outgoingApplicationCommunications').removeObject(landscape.get('outgoingApplicationCommunications').objectAt(i));
+					console.log("ich habe etwas entfernt! : " + i);
 				}
 			}
+			this.set('modellRepo.modellLandscape', null);
+			this.get('renderingService').redrawScene();
 			this.set('modellRepo.modellLandscape', landscape);
-			this.get('renderingService').reSetupScene();
+			this.get('renderingService').redrawScene();
 		}
 	},
 
@@ -278,30 +286,29 @@ export default BaseRoute.extend(AlertifyHandler, {
 							if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).name === document.getElementById('cPN1').value){
 								for(let l=0; l < landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length;l++){
 									if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l).name === document.getElementById('cPA1').value){
-										console.log("GEFUNDEN!");
 										application1 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
 										break;
 									}
-									else{
-										this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
+									else if (l === landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length - 1){
+										this.showAlertifyMessage("Your first CommunicationPartner, could not be found.(A)");
 									}
 								}
 								break;
 							}
-							else{
-								this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
+							else if(k === landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').length - 1){
+								this.showAlertifyMessage("Your first CommunicationPartner, could not be found.(N)");
 							}
 						}
 						break;
 					}
-					else{
-						this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
+					else if(j === landscape.get('systems').objectAt(i).get('nodegroups').length - 1){
+						this.showAlertifyMessage("Your first CommunicationPartner, could not be found.(NG)");
 					}
 				}
 				break;
 			}
-			else{
-				this.showAlertifyMessage("Your first CommunicationPartner, could not be found.");
+			else if (i === landscape.get('systems').length - 1){
+				this.showAlertifyMessage("Your first CommunicationPartner, could not be found.(S)");
 			}
 		}
 
@@ -314,36 +321,35 @@ export default BaseRoute.extend(AlertifyHandler, {
 							if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).name === document.getElementById('cPN2').value){
 								for(let l=0; l < landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length;l++){
 									if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l).name === document.getElementById('cPA2').value){
-										console.log("GEFUNDEN2!");
 										application2 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
 										break;
 									}
-									else{
-										this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
+									else if (l === landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length - 1){
+										this.showAlertifyMessage("Your second CommunicationPartner, could not be found.(A)");
 									}
 								}
 								break;
 							}
-							else{
-								this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
+							else if(k === landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').length - 1){
+								this.showAlertifyMessage("Your second CommunicationPartner, could not be found.(N)");
 							}
 						}
 						break;
 					}
-					else{
-						this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
+					else if(j === landscape.get('systems').objectAt(i).get('nodegroups').length - 1){
+						this.showAlertifyMessage("Your second CommunicationPartner, could not be found.(NG)");
 					}
 				}
 				break;
 			}
-			else{
-				this.showAlertifyMessage("Your second CommunicationPartner, could not be found.");
+			else if (i === landscape.get('systems').length - 1){
+				this.showAlertifyMessage("Your second CommunicationPartner, could not be found.(S)");
 			}
 		}
 
 		//make them communicate via outgoingApplicationCommunications and inverse: 'sourceApplication'
 		const communication1 = this.get('store').createRecord('applicationcommunication', {
-			"requests": Math.floor(Math.random() * 1000),
+			"requests": 100,
 			"averageResponseTime": Math.floor(Math.random() * 50),
 			"id": Math.floor(Math.random() * 100000 + 10000),
 			"technology": "PERL",
@@ -358,7 +364,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 		landscape.save();
 		this.set('modellRepo.modellLandscape', landscape);
-		this.get('renderingService').reSetupScene();
+		this.get('renderingService').redrawScene();
 	},
 
 	switchComP(){

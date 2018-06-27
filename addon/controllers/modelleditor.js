@@ -2,6 +2,8 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service'; 
 import { computed } from '@ember/object';
 import { observer } from '@ember/object';
+import { getOwner } from '@ember/application';
+import LandscapeInteraction from 'explorviz-frontend/utils/landscape-rendering/interaction';
 
 /**
 * TODO
@@ -42,6 +44,47 @@ export default Controller.extend({
   showLandscape: computed('modellRepo.modellApplication', function() {
     return !this.get('modellRepo.modellApplication');
   }),
+
+	initMyListeners() {
+	    const landscapeInteraction = LandscapeInteraction.create(getOwner(this).ownerInjection());
+	    this.set('landscapeInteraction', landscapeInteraction);
+
+	    this.get('landscapeInteraction').on('singleClick', function(emberModel) {
+			switch(emberModel.constructor.modelName){
+				case "application":
+					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('parent').get('name');		
+					document.getElementById('cPNG1').value = emberModel.get('parent').get('parent').get('name');		
+					document.getElementById('cPN1').value = emberModel.get('parent').get('name');
+					document.getElementById('cPA1').value = emberModel.get('name');		
+					break;
+				case "node":
+					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');		
+					document.getElementById('cPNG1').value = emberModel.get('parent').get('name');		
+					document.getElementById('cPN1').value = emberModel.get('name');
+					document.getElementById('cPA1').value = "to be selected";		
+					break;
+				case "nodegroup":
+					document.getElementById('cPS1').value = emberModel.get('parent').get('name');		
+					document.getElementById('cPNG1').value = emberModel.get('name');		
+					document.getElementById('cPN1').value = "to be selected";
+					document.getElementById('cPA1').value = "to be selected";		
+					break;
+				case "system":
+					document.getElementById('cPS1').value = emberModel.get('name');		
+					document.getElementById('cPNG1').value = "to be selected";
+					document.getElementById('cPN1').value = "to be selected";
+					document.getElementById('cPA1').value = "to be selected";
+					break;
+				case "applicationcommunication":
+					//alertify or debug or something
+					break;
+			}
+	    });
+
+	    this.get('landscapeInteraction').on('doubleClick', function(emberModel) {
+	      console.log(emberModel);
+	    });
+	  },
 
   actions: {
 
@@ -90,6 +133,7 @@ export default Controller.extend({
       // Passes the new state from controller via service to component
       self.get('viewImporter').transmitView(newState);
     });
+    this.initMyListeners();
   },
 
   // @Override
@@ -100,9 +144,6 @@ export default Controller.extend({
   },
 
   clickedEntity(emberRecord) {
-    //switch is not possible because not every model has a comparable member
-    //if emberRecord === application
-    console.log(emberRecord.constructor.modelName);
     switch(emberRecord.constructor.modelName){
     	case "application":
     		document.getElementById('cPS1').value = emberRecord.get('parent').get('parent').get('parent').get('name');		
