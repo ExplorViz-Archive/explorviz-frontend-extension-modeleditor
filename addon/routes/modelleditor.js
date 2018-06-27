@@ -384,6 +384,25 @@ export default BaseRoute.extend(AlertifyHandler, {
 		document.getElementById('cPA2').value = cPA1;
 	},
 
+	//TODO: look up if there is a parent, then take that as a base component and add a child!
+	newComponent(application){
+		const component = this.get('store').createRecord('component', {
+			"name": document.getElementById('nCComponentN').value,
+			"fullQualifiedName": document.getElementById('nCComponentN').value,
+			"parentComponent": document.getElementById('nPComponentN').value,
+			"id": Math.floor(Math.random() * 100000 + 10000)
+		});
+		console.log(application);
+		application.get('components').objectAt(0).get('children').addObject(component);
+		console.log("app:");
+		console.log(application);
+		console.log("component: \n");
+		console.log(component);
+		//this.get('modelRepo.modellLandscape').save();
+		this.set('modellRepo.modellApplication', application);
+		this.get('renderingService').redrawScene();
+	},
+
     resetRoute() {
       // your cleanup code here
     }

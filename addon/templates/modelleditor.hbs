@@ -4,10 +4,15 @@
 
 
 <div class="canvas">
-{{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}
+{{#if showLandscape}}
+  {{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}
+{{else}}
+  {{visualization/rendering/application-rendering latestApplication=modellRepo.modellApplication}}
+{{/if}}
 </div>
 <div class="buttonMenu">
 	<div class="buttonContainer">
+    {{#if showLandscape}}
       <br>
       &emsp;<input id="nMN" type=number value="42">
       &emsp;<button id="bNMN" {{action 'newModel' modellRepo.modellLandscape}}>New Model</button><br>
@@ -30,15 +35,26 @@
       &emsp;<input id="cPS1" value="newSystemName"><br>
       &emsp;<input id="cPNG1" value="newNodegroupName"><br>
       &emsp;<input id="cPN1" value="newNodeName"><br>
-      &emsp;<input id="cPA1" value="newApplicationName"><br><br>
-      &emsp;<button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button>&emsp;<button id="bNAN" {{action 'switchComP'}}>Switch Partner</button><br><br>
+      &emsp;<input id="cPA1" value="newApplicationName"><br>
+      <br>
+      &emsp;<button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button>&emsp;<button id="bNAN" {{action 'switchComP'}}>Switch Partner</button><br>
+      <br>
       &emsp;CommunicationPartner2:<br>
       &emsp;<input id="cPS2" value="newSystemName"><br>
       &emsp;<input id="cPNG2" value="newNodegroupName"><br>
       &emsp;<input id="cPN2" value="newNodeName"><br>
       &emsp;<input id="cPA2" value="newApplicationName"><br>
-      
-  	</div>
+    {{else}}
+      <br>
+      &emsp;<input id="nPComponentN" value="ParentComponentName"><br>
+      <br>
+      &emsp;<input id="nCComponentN" value="newComponentName">
+      &emsp;<button id="bNComponentN" {{action 'newComponent' modellRepo.modellApplication}}>New Component</button><br>
+      &emsp;<input id="nClazzN" value="newClassName">
+      &emsp;<button id="bNClazzN" {{action 'newClazz' modellRepo.modellApplication}}>New Class</button><br>
+      <br>
+    {{/if}}
+  </div>
 </div>
 
 

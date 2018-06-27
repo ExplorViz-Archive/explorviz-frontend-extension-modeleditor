@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import { observer } from '@ember/object';
 import { getOwner } from '@ember/application';
 import LandscapeInteraction from 'explorviz-frontend/utils/landscape-rendering/interaction';
+import ApplicationInteraction from 'explorviz-frontend/utils/application-rendering/interaction';
 
 /**
 * TODO
@@ -47,6 +48,54 @@ export default Controller.extend({
 
 	initMyListeners() {
 	    const landscapeInteraction = LandscapeInteraction.create(getOwner(this).ownerInjection());
+
+	    const self = this;
+
+	    landscapeInteraction.handleDoubleClick = function(mouse) {
+			const origin = {};
+
+			origin.x = ((mouse.x - (this.get('renderer').domElement.offsetLeft+0.66)) /
+			  this.get('renderer').domElement.clientWidth) * 2 - 1;
+
+			origin.y = -((mouse.y - (this.get('renderer').domElement.offsetTop+0.665)) /
+			  this.get('renderer').domElement.clientHeight) * 2 + 1;
+
+			const intersectedViewObj = this.get('raycaster').raycasting(null, origin,
+			  this.get('camera'), this.get('raycastObjects'));
+
+			let emberModel;
+
+			if(intersectedViewObj) {
+
+				// hide tooltip
+				this.get('popUpHandler').hideTooltip();
+
+				emberModel = intersectedViewObj.object.userData.model;
+				const emberModelName = emberModel.constructor.modelName;
+
+				if(emberModelName === "application"){
+					// data available => open application-rendering
+					this.closeAlertifyMessages();
+					self.set('modellRepo.modellApplication', emberModel);
+					console.log(emberModel);
+				}
+				else if (emberModelName === "nodegroup" || emberModelName === "system"){
+					emberModel.setOpened(!emberModel.get('opened'));
+					this.trigger('redrawScene');
+				}
+				else if(emberModelName === "component"){
+					emberModel.setOpenedStatus(!emberModel.get('opened'));
+					emberModel.set('highlighted', false);
+					this.trigger('redrawScene');
+				}
+
+			}
+
+			this.trigger('doubleClick', emberModel);
+
+		}
+
+
 	    this.set('landscapeInteraction', landscapeInteraction);
 
 	    this.get('landscapeInteraction').on('singleClick', function(emberModel) {
@@ -79,10 +128,6 @@ export default Controller.extend({
 					//alertify or debug or something
 					break;
 			}
-	    });
-
-	    this.get('landscapeInteraction').on('doubleClick', function(emberModel) {
-	      console.log(emberModel);
 	    });
 	  },
 
