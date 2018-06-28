@@ -386,7 +386,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 	newComponent(application){
 		self = this;
 		if(document.getElementById('nPComponentN').value.length !== 0){
-			parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+			let parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
 
 			function findComponent(fullQualifiedName, component){
 				let returnvalue;
@@ -412,7 +412,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				}
 				return returnvalue;
 			}
-			if(parent !== null){
+			if(parent !== undefined || parent !== null){
 				const component = this.get('store').createRecord('component', {
 					"name": document.getElementById('nCComponentN').value,
 					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nCComponentN').value,
@@ -462,7 +462,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 	newClazz(application){
 		self = this;
 		if(document.getElementById('nPComponentN').value.length !== 0){
-			parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+			let parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
 
 			function findComponent(fullQualifiedName, component){
 				let returnvalue;
@@ -488,7 +488,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				}
 				return returnvalue;
 			}
-			if(parent !== null){
+			if(parent !== undefined || parent !== null){
 				const clazz = this.get('store').createRecord('clazz', {
 					"name": document.getElementById('nClazzN').value,
 					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nClazzN').value,
@@ -502,6 +502,61 @@ export default BaseRoute.extend(AlertifyHandler, {
 				this.get('renderingService').redrawScene();
 			}
 		}			
+	},
+
+	deleteComponent(application){
+		
+		if(document.getElementById('nPComponentN').value.length !== 0){
+			let message = deleteComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+
+			function deleteComponent(fullQualifiedName, component){
+				let returnvalue = "there was nothing found to be delted";
+				for(let i = 0; i < component.get('children').length; i++){
+					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
+						component.get('children').removeObject(component.get('children').objectAt(i));
+						let string = fullQualifiedName;
+						string = string.bold();
+						return string + " was deleted successfully";
+					}else{
+						returnvalue = deleteComponent(fullQualifiedName, component.get('children').objectAt(i));
+					}
+				}
+			}
+			this.showAlertifyMessage(message);
+		}
+		this.set('modellRepo.modellApplication', application);
+		this.get('renderingService').redrawScene();
+	},
+
+	deleteClazz(application){
+
+		if(document.getElementById('nPComponentN').value.length !== 0){
+			let message = deleteClazz(document.getElementById('nPComponentN').value, document.getElementById('nClazzN').value, application.get('components').objectAt(0));
+
+			function deleteClazz(fullQualifiedParentComponentName, clazzName, component){
+				let returnvalue = "there was nothing found to be delted";
+				for(let i = 0; i < component.get('children').length; i++){
+					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedParentComponentName){
+						if(component.get('children').objectAt(i).get('clazzes')){
+							for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
+								if((fullQualifiedParentComponentName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
+									let string = fullQualifiedParentComponentName + "." + clazzName;
+									string = string.bold();
+									return string + " was deleted successfully";
+								}
+							}
+						}
+					}
+					if(component.get('children').objectAt(i).get('children')){
+						returnvalue = deleteClazz(fullQualifiedParentComponentName, clazzName, component.get('children').objectAt(i));
+					}
+				}
+				return returnvalue;
+			}
+			this.showAlertifyMessage(message);
+		}
+		this.set('modellRepo.modellApplication', application);
+		this.get('renderingService').redrawScene();
 	},
 
     resetRoute() {

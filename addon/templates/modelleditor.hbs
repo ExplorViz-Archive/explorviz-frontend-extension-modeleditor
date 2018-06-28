@@ -46,13 +46,23 @@
       &emsp;<input id="cPA2" value="newApplicationName"><br>
     {{else}}
       <br>
+      &emsp;Parent Component:
       &emsp;<input id="nPComponentN" value=""><br>
       <br>
+      &emsp;New Component:
       &emsp;<input id="nCComponentN" value="newComponentName">
       &emsp;<button id="bNComponentN" {{action 'newComponent' modellRepo.modellApplication}}>New Component</button><br>
+      &emsp;New Class:
       &emsp;<input id="nClazzN" value="newClassName">
       &emsp;<button id="bNClazzN" {{action 'newClazz' modellRepo.modellApplication}}>New Class</button><br>
       <br>
+      <br>
+      <br>
+      &emsp;<button id="bDeleteComponent" {{action 'deleteComponent' modellRepo.modellApplication}}>Delete Parent Component</button><br>
+      <br>
+      <br>
+      <br>
+      &emsp;<button id="bDeleteClazz" {{action 'deleteClazz' modellRepo.modellApplication}}>Delete Class</button><br>
       <script>
       document.getElementById("nCComponentN").addEventListener("keyup", function(event) {
         event.preventDefault();
