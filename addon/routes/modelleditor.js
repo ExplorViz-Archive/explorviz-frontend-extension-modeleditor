@@ -406,13 +406,13 @@ export default BaseRoute.extend(AlertifyHandler, {
 						}
 						return component.get('children').objectAt(i);
 					}
-					if(component.get('children').objectAt(i).get('children')){
+					if(component.get('children').objectAt(i).get('children') && returnvalue == undefined) {
 						returnvalue = findComponent(fullQualifiedName, component.get('children').objectAt(i));
 					}
 				}
 				return returnvalue;
 			}
-			if(parent !== undefined || parent !== null){
+			if(parent != undefined || parent != null){
 				const component = this.get('store').createRecord('component', {
 					"name": document.getElementById('nCComponentN').value,
 					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nCComponentN').value,
@@ -443,6 +443,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						application.get('components').objectAt(0).get('children').addObject(component);
 						this.set('modellRepo.modellApplication', application);
 						this.get('renderingService').redrawScene();
+						break;
 					}
 				}
 			}else{
@@ -482,13 +483,13 @@ export default BaseRoute.extend(AlertifyHandler, {
 						}
 						return component.get('children').objectAt(i);
 					}
-					if(component.get('children').objectAt(i).get('children')){
+					if(component.get('children').objectAt(i).get('children') && returnvalue == undefined){
 						returnvalue = findComponent(fullQualifiedName, component.get('children').objectAt(i));
 					}
 				}
 				return returnvalue;
 			}
-			if(parent !== undefined || parent !== null){
+			if(parent != undefined || parent != null){
 				const clazz = this.get('store').createRecord('clazz', {
 					"name": document.getElementById('nClazzN').value,
 					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nClazzN').value,
@@ -540,6 +541,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						if(component.get('children').objectAt(i).get('clazzes')){
 							for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
 								if((fullQualifiedParentComponentName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
+									component.get('children').objectAt(i).get('clazzes').removeObject(component.get('children').objectAt(i).get('clazzes').objectAt(j));
 									let string = fullQualifiedParentComponentName + "." + clazzName;
 									string = string.bold();
 									return string + " was deleted successfully";
