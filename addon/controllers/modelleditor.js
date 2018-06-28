@@ -43,7 +43,7 @@ export default Controller.extend({
 
   //why does show Landscape only request an application?
   showLandscape: computed('modellRepo.modellApplication', function() {
-    return !this.get('modellRepo.modellApplication');
+	return !this.get('modellRepo.modellApplication');
   }),
 
 	initMyListeners() {
@@ -144,19 +144,21 @@ export default Controller.extend({
 
 			let emberModel;
 
-			// Hide (old) tooltip
-			this.get('popUpHandler').hideTooltip();
+			if(intersectedViewObj) {
+				// Hide (old) tooltip
+				this.get('popUpHandler').hideTooltip();
 
-			emberModel = intersectedViewObj.object.userData.model;
-			if(emberModel.get('parentComponent').get('fullQualifiedName')) {
-	    		document.getElementById('nPComponentN').value =  emberModel.get('fullQualifiedName');
-	    	}else{
-	    		document.getElementById('nPComponentN').value =  "";
-	    	}
+				emberModel = intersectedViewObj.object.userData.model;
+				if(emberModel.get('parentComponent').get('fullQualifiedName')) {
+		    		document.getElementById('nPComponentN').value =  emberModel.get('fullQualifiedName');
+		    	}else{
+		    		document.getElementById('nPComponentN').value =  "";
+		    	}
+		    }
 	    	this.trigger('singleClick', emberModel);
 		};
 	    this.set('applicationInteraction', applicationInteraction);
-
+	    
 	  },
 
   actions: {

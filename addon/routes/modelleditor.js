@@ -468,9 +468,9 @@ export default BaseRoute.extend(AlertifyHandler, {
 				let returnvalue;
 				for(let i = 0; i < component.get('children').length; i++){
 					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
-						if(component.get('children').objectAt(i).get('children')){
-							for(let j =0; j < component.get('children').objectAt(i).get('children').length; j++){
-								if((fullQualifiedName + "." + document.getElementById('nClazzN').value) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
+						if(component.get('children').objectAt(i).get('clazzes')){
+							for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
+								if((fullQualifiedName + "." + document.getElementById('nClazzN').value) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
 									let cString = document.getElementById('nClazzN').value;
 									cString = cString.bold();
 									let pString = document.getElementById('nPComponentN').value;

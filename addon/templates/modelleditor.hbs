@@ -53,6 +53,22 @@
       &emsp;<input id="nClazzN" value="newClassName">
       &emsp;<button id="bNClazzN" {{action 'newClazz' modellRepo.modellApplication}}>New Class</button><br>
       <br>
+      <script>
+      document.getElementById("nCComponentN").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+          document.getElementById("bNComponentN").click();
+        }
+      });
+
+      document.getElementById("nClazzN").addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+        document.getElementById("bNClazzN").click();
+      }
+      });
+      </script>
+
     {{/if}}
   </div>
 </div>
