@@ -77,7 +77,6 @@ export default Controller.extend({
 					// data available => open application-rendering
 					this.closeAlertifyMessages();
 					self.set('modellRepo.modellApplication', emberModel);
-					console.log(emberModel);
 				}
 				else if (emberModelName === "nodegroup" || emberModelName === "system"){
 					emberModel.setOpened(!emberModel.get('opened'));
@@ -129,6 +128,35 @@ export default Controller.extend({
 					break;
 			}
 	    });
+
+	    const applicationInteraction = ApplicationInteraction.create(getOwner(this).ownerInjection());
+		applicationInteraction.handleSingleClick = function(mouse) {
+			const origin = {};
+
+			origin.x = ((mouse.x - (this.get('renderer').domElement.offsetLeft+0.66)) / 
+			this.get('renderer').domElement.clientWidth) * 2 - 1;
+
+			origin.y = -((mouse.y - (this.get('renderer').domElement.offsetTop+0.665)) / 
+			this.get('renderer').domElement.clientHeight) * 2 + 1;
+
+			const intersectedViewObj = this.get('raycaster').raycasting(null, origin, 
+			this.get('camera'), this.get('raycastObjects'));
+
+			let emberModel;
+
+			// Hide (old) tooltip
+			this.get('popUpHandler').hideTooltip();
+
+			emberModel = intersectedViewObj.object.userData.model;
+			if(emberModel.get('parentComponent').get('fullQualifiedName')) {
+	    		document.getElementById('nPComponentN').value =  emberModel.get('fullQualifiedName');
+	    	}else{
+	    		document.getElementById('nPComponentN').value =  "";
+	    	}
+	    	this.trigger('singleClick', emberModel);
+		};
+	    this.set('applicationInteraction', applicationInteraction);
+
 	  },
 
   actions: {

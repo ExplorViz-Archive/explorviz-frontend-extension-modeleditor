@@ -7,7 +7,7 @@
 {{#if showLandscape}}
   {{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}
 {{else}}
-  {{visualization/rendering/application-rendering latestApplication=modellRepo.modellApplication}}
+  {{visualization/rendering/application-rendering latestApplication=modellRepo.modellApplication interaction=applicationInteraction}}
 {{/if}}
 </div>
 <div class="buttonMenu">
@@ -46,7 +46,7 @@
       &emsp;<input id="cPA2" value="newApplicationName"><br>
     {{else}}
       <br>
-      &emsp;<input id="nPComponentN" value="ParentComponentName"><br>
+      &emsp;<input id="nPComponentN" value=""><br>
       <br>
       &emsp;<input id="nCComponentN" value="newComponentName">
       &emsp;<button id="bNComponentN" {{action 'newComponent' modellRepo.modellApplication}}>New Component</button><br>

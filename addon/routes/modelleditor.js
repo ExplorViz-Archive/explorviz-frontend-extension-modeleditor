@@ -259,11 +259,9 @@ export default BaseRoute.extend(AlertifyHandler, {
 			string = string.bold();
 			this.showAlertifyMessage("There is no system called " + string + " , therefor no system can be deleted.");
 		}else{
-			console.log(landscape.get('outgoingApplicationCommunications').length);
 			for(let i=0; i < landscape.get('outgoingApplicationCommunications').length;i++){
 				if(landscape.get('outgoingApplicationCommunications').objectAt(i).get('sourceApplication').get('parent').get('parent').get('parent').get('name') === document.getElementById('nSN').value || landscape.get('outgoingApplicationCommunications').objectAt(i).get('targetApplication').get('parent').get('parent').get('parent').get('name') === document.getElementById('nSN').value){
 					landscape.get('outgoingApplicationCommunications').removeObject(landscape.get('outgoingApplicationCommunications').objectAt(i));
-					console.log("ich habe etwas entfernt! : " + i);
 				}
 			}
 			this.set('modellRepo.modellLandscape', null);
@@ -384,28 +382,132 @@ export default BaseRoute.extend(AlertifyHandler, {
 		document.getElementById('cPA2').value = cPA1;
 	},
 
-	//TODO: look up if there is a parent, then take that as a base component and add a child!
+
 	newComponent(application){
-		const component = this.get('store').createRecord('component', {
-			"name": document.getElementById('nCComponentN').value,
-			"fullQualifiedName": document.getElementById('nCComponentN').value,
-			"parentComponent": document.getElementById('nPComponentN').value,
-			"id": Math.floor(Math.random() * 100000 + 10000)
-		});
-		console.log(application);
-		application.get('components').objectAt(0).get('children').addObject(component);
-		console.log("app:");
-		console.log(application);
-		console.log("component: \n");
-		console.log(component);
-		//this.get('modelRepo.modellLandscape').save();
-		this.set('modellRepo.modellApplication', application);
-		this.get('renderingService').redrawScene();
+		self = this;
+		if(document.getElementById('nPComponentN').value.length !== 0){
+			parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+
+			function findComponent(fullQualifiedName, component){
+				let returnvalue;
+				for(let i = 0; i < component.get('children').length; i++){
+					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
+						if(component.get('children').objectAt(i).get('children')){
+							for(let j =0; j < component.get('children').objectAt(i).get('children').length; j++){
+								if((fullQualifiedName + "." + document.getElementById('nCComponentN').value) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
+									let cString = document.getElementById('nCComponentN').value;
+									cString = cString.bold();
+									let pString = document.getElementById('nPComponentN').value;
+									pString = pString.bold();
+									self.showAlertifyMessage("there already is a component named " + cString + " in the component of " + pString);
+									return null;
+								}
+							}
+						}
+						return component.get('children').objectAt(i);
+					}
+					if(component.get('children').objectAt(i).get('children')){
+						returnvalue = findComponent(fullQualifiedName, component.get('children').objectAt(i));
+					}
+				}
+				return returnvalue;
+			}
+			if(parent !== null){
+				const component = this.get('store').createRecord('component', {
+					"name": document.getElementById('nCComponentN').value,
+					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nCComponentN').value,
+					"parentComponent": parent,
+					"id": Math.floor(Math.random() * 100000 + 10000)
+				});
+				parent.get('children').addObject(component);
+				//this.get('modelRepo.modellLandscape').save();
+				this.set('modellRepo.modellApplication', application);
+				this.get('renderingService').redrawScene();
+			}
+		}else{
+			//search for doubles
+			if(application.get('components').objectAt(0).get('children').length !== 0){
+				for(let i = 0; i < application.get('components').objectAt(0).get('children').length; i++){
+					if(application.get('components').objectAt(0).get('children').objectAt(i).get('fullQualifiedName') === document.getElementById('nCComponentN').value){
+						let cString = document.getElementById('nCComponentN').value;
+						cString = cString.bold();
+						self.showAlertifyMessage("there already is a component named " + cString);
+						break;
+					}else if(i === application.get('components').length - 1){
+						const component = this.get('store').createRecord('component', {
+							"name": document.getElementById('nCComponentN').value,
+							"fullQualifiedName": document.getElementById('nCComponentN').value,
+							"parentComponent": application.get('components').objectAt(0),
+							"id": Math.floor(Math.random() * 100000 + 10000)
+						});
+						application.get('components').objectAt(0).get('children').addObject(component);
+						this.set('modellRepo.modellApplication', application);
+						this.get('renderingService').redrawScene();
+					}
+				}
+			}else{
+				const component = this.get('store').createRecord('component', {
+					"name": document.getElementById('nCComponentN').value,
+					"fullQualifiedName": document.getElementById('nCComponentN').value,
+					"parentComponent": application.get('components').objectAt(0),
+					"id": Math.floor(Math.random() * 100000 + 10000)
+				});
+				application.get('components').objectAt(0).get('children').addObject(component);
+				this.set('modellRepo.modellApplication', application);
+				this.get('renderingService').redrawScene();
+			}
+		}
+	},
+
+	newClazz(application){
+		self = this;
+		if(document.getElementById('nPComponentN').value.length !== 0){
+			parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+
+			function findComponent(fullQualifiedName, component){
+				let returnvalue;
+				for(let i = 0; i < component.get('children').length; i++){
+					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
+						if(component.get('children').objectAt(i).get('children')){
+							for(let j =0; j < component.get('children').objectAt(i).get('children').length; j++){
+								if((fullQualifiedName + "." + document.getElementById('nClazzN').value) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
+									let cString = document.getElementById('nClazzN').value;
+									cString = cString.bold();
+									let pString = document.getElementById('nPComponentN').value;
+									pString = pString.bold();
+									self.showAlertifyMessage("there already is a class named " + cString + " in the component of " + pString);
+									return null;
+								}
+							}
+						}
+						return component.get('children').objectAt(i);
+					}
+					if(component.get('children').objectAt(i).get('children')){
+						returnvalue = findComponent(fullQualifiedName, component.get('children').objectAt(i));
+					}
+				}
+				return returnvalue;
+			}
+			if(parent !== null){
+				const clazz = this.get('store').createRecord('clazz', {
+					"name": document.getElementById('nClazzN').value,
+					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nClazzN').value,
+					"parent": parent,
+					"instanceCount": 1,
+					"id": Math.floor(Math.random() * 100000 + 10000)
+				});
+				parent.get('clazzes').addObject(clazz);
+				//this.get('modelRepo.modellLandscape').save();
+				this.set('modellRepo.modellApplication', application);
+				this.get('renderingService').redrawScene();
+			}
+		}			
 	},
 
     resetRoute() {
       // your cleanup code here
     }
+
   }
 
 });
