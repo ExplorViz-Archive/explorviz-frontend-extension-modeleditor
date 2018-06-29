@@ -37,7 +37,7 @@ modellRepo: service('modell-repository'),
     }
 
     function error(e){
-      console.error(e);
+      this.showAlertifyMessage(e);
       self.get("store").adapterFor('landscape').set('namespace', 'landscape');
     }
   }

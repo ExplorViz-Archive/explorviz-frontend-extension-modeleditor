@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service'; 
 import { computed } from '@ember/object';
-import { observer } from '@ember/object';
 import { getOwner } from '@ember/application';
 import LandscapeInteraction from 'explorviz-frontend/utils/landscape-rendering/interaction';
 import ApplicationInteraction from 'explorviz-frontend/utils/application-rendering/interaction';
@@ -47,21 +46,19 @@ export default Controller.extend({
   }),
 
 	initMyListeners() {
-	    const landscapeInteraction = LandscapeInteraction.create(getOwner(this).ownerInjection());
-
-	    const self = this;
-
-	    landscapeInteraction.handleDoubleClick = function(mouse) {
+		const landscapeInteraction = LandscapeInteraction.create(getOwner(this).ownerInjection());
+		const self = this;
+		landscapeInteraction.handleDoubleClick = function(mouse) {
 			const origin = {};
 
 			origin.x = ((mouse.x - (this.get('renderer').domElement.offsetLeft+0.66)) /
-			  this.get('renderer').domElement.clientWidth) * 2 - 1;
+				this.get('renderer').domElement.clientWidth) * 2 - 1;
 
 			origin.y = -((mouse.y - (this.get('renderer').domElement.offsetTop+0.665)) /
-			  this.get('renderer').domElement.clientHeight) * 2 + 1;
+				this.get('renderer').domElement.clientHeight) * 2 + 1;
 
 			const intersectedViewObj = this.get('raycaster').raycasting(null, origin,
-			  this.get('camera'), this.get('raycastObjects'));
+				this.get('camera'), this.get('raycastObjects'));
 
 			let emberModel;
 
@@ -95,9 +92,9 @@ export default Controller.extend({
 		}
 
 
-	    this.set('landscapeInteraction', landscapeInteraction);
+		this.set('landscapeInteraction', landscapeInteraction);
 
-	    this.get('landscapeInteraction').on('singleClick', function(emberModel) {
+		this.get('landscapeInteraction').on('singleClick', function(emberModel) {
 			switch(emberModel.constructor.modelName){
 				case "application":
 					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('parent').get('name');		
@@ -127,11 +124,11 @@ export default Controller.extend({
 					//alertify or debug or something
 					break;
 			}
-	    });
+		});
 
-	    //this should be rightclicking and linking it to the second model
-	    //TODO: research what rightclicking is in this context
-	    
+		//this should be rightclicking and linking it to the second model
+		//TODO: research what rightclicking is in this context
+
 		// this.get('landscapeInteraction').on('contextMenu', function(emberModel) {
 		// 	switch(emberModel.constructor.modelName){
 		// 		case "application":
@@ -163,9 +160,9 @@ export default Controller.extend({
 		// 			break;
 		// 	}
 		// });
-	    
 
-	    const applicationInteraction = ApplicationInteraction.create(getOwner(this).ownerInjection());
+
+		const applicationInteraction = ApplicationInteraction.create(getOwner(this).ownerInjection());
 		applicationInteraction.handleSingleClick = function(mouse) {
 			const origin = {};
 
@@ -193,72 +190,72 @@ export default Controller.extend({
 					}else{
 						document.getElementById('nPComponentN').value =  "";
 					}
-			    }
-			    if(emberModelName === 'clazz'){
-			    	document.getElementById('nPComponentN').value =  emberModel.get('parent').get('fullQualifiedName');
-			    	document.getElementById('nClazzN').value = emberModel.get('name');
-			    }
-		    }
-	    	this.trigger('singleClick', emberModel);
+				}
+				if(emberModelName === 'clazz'){
+					document.getElementById('nPComponentN').value =  emberModel.get('parent').get('fullQualifiedName');
+					document.getElementById('nClazzN').value = emberModel.get('name');
+				}
+			}
+			this.trigger('singleClick', emberModel);
 		};
-	    this.set('applicationInteraction', applicationInteraction);
-	    
-	  },
+		this.set('applicationInteraction', applicationInteraction);
 
-  actions: {
+	},
 
-    resetView() {
-      this.set('viewImporter.importedURL', false);
-      this.get('renderingService').reSetupScene();
-      this.get('reloadHandler').startExchange();
-    }
-    
-  },
+	actions: {
 
-  showTimeline() {
-    this.set('renderingService.showTimeline', true);
-  },
+		resetView() {
+			this.set('viewImporter.importedURL', false);
+			this.get('renderingService').reSetupScene();
+			this.get('reloadHandler').startExchange();
+		}
 
-  hideVersionbar(){
-    this.set('renderingService.showVersionbar', false);
-  },
+	},
 
-  // @Override
-  init() {
-    this._super(...arguments);
+	showTimeline() {
+		this.set('renderingService.showTimeline', true);
+	},
 
-    const self = this;
+	hideVersionbar(){
+		this.set('renderingService.showVersionbar', false);
+	},
 
-    this.set('condition', []);
+	// @Override
+	init() {
+		this._super(...arguments);
 
-    // setup url-builder Service
-    this.get('urlBuilder').on('transmitState', function(state) {
-      self.set('state',state);
-    });
+	const self = this;
 
-    // Listen for component request
-    this.get('viewImporter').on('requestView', function() {
-      const newState = {};
-      // Get and convert query params
+		this.set('condition', []);
 
-      newState.timestamp = self.get('timestamp');
-      newState.appID = self.get('appID');
+		// setup url-builder Service
+		this.get('urlBuilder').on('transmitState', function(state) {
+		self.set('state',state);
+	});
 
-      newState.camX = parseFloat(self.get('camX'));
-      newState.camY = parseFloat(self.get('camY'));
-      newState.camZ = parseFloat(self.get('camZ'));
-      newState.condition = self.get('condition');
+	// Listen for component request
+	this.get('viewImporter').on('requestView', function() {
+		const newState = {};
+		// Get and convert query params
 
-      // Passes the new state from controller via service to component
-      self.get('viewImporter').transmitView(newState);
-    });
-    this.initMyListeners();
-  },
+		newState.timestamp = self.get('timestamp');
+		newState.appID = self.get('appID');
 
-  // @Override
-  cleanup() {
-    this._super(...arguments);
-    this.get('urlBuilder').off('transmitState');
-    this.get('viewImporter').off('requestView');
-  }
+		newState.camX = parseFloat(self.get('camX'));
+		newState.camY = parseFloat(self.get('camY'));
+		newState.camZ = parseFloat(self.get('camZ'));
+		newState.condition = self.get('condition');
+
+		// Passes the new state from controller via service to component
+		self.get('viewImporter').transmitView(newState);
+	});
+	this.initMyListeners();
+	},
+
+	// @Override
+	cleanup() {
+		this._super(...arguments);
+		this.get('urlBuilder').off('transmitState');
+		this.get('viewImporter').off('requestView');
+	}
 });

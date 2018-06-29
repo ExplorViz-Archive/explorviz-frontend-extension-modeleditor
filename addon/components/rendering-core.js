@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 import {inject as service} from '@ember/service';
 import Evented from '@ember/object/evented';
-import { Promise } from 'rsvp';
-
 import THREE from "npm:three";
 import config from 'explorviz-frontend/config/environment';
 import THREEPerformance from 'explorviz-frontend/mixins/threejs-performance';
@@ -420,49 +418,8 @@ export default Component.extend(Evented, THREEPerformance, {
       this.get('camera').position.z = camZ;
     }
     this.get('camera').updateProjectionMatrix();
-
-    // load actual landscape
-    const timestamp = this.get('newState').timestamp;
-    const appID = this.get('newState').appID;
-
-    //if(timestamp) {
-      //self.get('reloadHandler').loadLandscapeById(timestamp, appID);
-      //waitForLandscape();
-      //self.get('landscapeRepo.modellLandscape');
-
-//    }
-
     self.set('initImport',true);
 
-  /*  function waitForLandscape() {
-      // New Promise
-      var promise = new Promise(
-        function(resolve) {
-          window.setTimeout(
-            function() {
-              // Wait until landscape is loaded
-              if(self.get('landscapeRepo.modellLandscape') === null){
-                waitForLandscape();
-              }
-              // Fulfill promise
-              else if(self.get('landscapeRepo.modellLandscape')){
-                resolve();
-              }
-            }, 500);
-        });
-      // Promise fulfilled => apply condition
-      promise.then(
-        function() {
-          self.get('reloadHandler').stopExchange();
-          if(appID){
-            self.applyAppCondition(self.get('landscapeRepo.latestApplication'));
-          }
-          else{
-            self.applyLandscapeCondition(self.get('landscapeRepo.modellLandscape'));
-          }
-        });
-    }
-    */
   },
 
   /**
@@ -480,7 +437,6 @@ export default Component.extend(Evented, THREEPerformance, {
    */
   populateScene() {
 
-    console.log("now populate!");
   },
 
 
@@ -523,7 +479,6 @@ export default Component.extend(Evented, THREEPerformance, {
    * @method cleanAndUpdateScene
    */
   cleanAndUpdateScene() {
-    console.log("WHAT?");
     const scene = this.get('scene');
 
     removeAllChildren(scene);

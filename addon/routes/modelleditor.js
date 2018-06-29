@@ -1,5 +1,4 @@
 import BaseRoute from 'explorviz-frontend/routes/base-route';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import {inject as service} from '@ember/service';
 import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 //import Jsonapi from 'explorviz-frontend/app/storagemodel/jsonapi';
@@ -18,27 +17,26 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 	model() {
 
-	  const landscape = this.get('store').createRecord('landscape',{
-		  "timestamp": Math.floor(Math.random() * 100000),
-		  "id": Math.floor(Math.random() * 100000 + 10000)
-	  });
+		const landscape = this.get('store').createRecord('landscape',{
+			"timestamp": Math.floor(Math.random() * 100000),
+			"id": Math.floor(Math.random() * 100000 + 10000)
+		});
 
-	  const adapterOptions = {filename:"filenametest"};
-
-	  landscape.save();
-	  if(!this.get('modellRepo.modellLandscape')) {
-	  		this.set('modellRepo.modellLandscape', landscape);
+		landscape.save();
+		if(!this.get('modellRepo.modellLandscape')) {
+				this.set('modellRepo.modellLandscape', landscape);
 		}
-	  return landscape;
+		return landscape;
 	},
   actions: {
     // @Override BaseRoute
     //
+    /*
     newModel(landscape){
     	//TODO: find the name in document.getElementById('nMN').value and set it to the model timestamp!
 
     },
-
+	*/
 
 	newSystem(landscape){
 		let foundDouble = false;
@@ -86,7 +84,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					"name": document.getElementById("nNgN").value,
 					"parent": system,
 					"id": Math.floor(Math.random() * 100000 + 10000)
-			  		});
+					});
 					system.get('nodegroups').addObject(nodeGroup);
 
 					landscape.save();
@@ -177,7 +175,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 		
 		const landscapeRecord = landscape;
 		
-		let changed = false;
 		let systemfound = false;
 		let nodegroupfound = false;
 		let foundDouble = false;
@@ -389,32 +386,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 	newComponent(componentParentName, componentName, application){
 		self = this;
 		if(componentParentName.length !== 0){
-			let parent = findComponent(componentParentName, application.get('components').objectAt(0));
+			let parent = findComponent(componentParentName, componentName, componentParentName, application.get('components').objectAt(0));
 
-			function findComponent(fullQualifiedName, component){
-				let returnvalue;
-				for(let i = 0; i < component.get('children').length; i++){
-					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
-						if(component.get('children').objectAt(i).get('children')){
-							for(let j =0; j < component.get('children').objectAt(i).get('children').length; j++){
-								if((fullQualifiedName + "." + componentName) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
-									let cString = componentName;
-									cString = cString.bold();
-									let pString = componentParentName;
-									pString = pString.bold();
-									self.showAlertifyMessage("there already is a component named " + cString + " in the component of " + pString);
-									return null;
-								}
-							}
-						}
-						return component.get('children').objectAt(i);
-					}
-					if(component.get('children').objectAt(i).get('children') && returnvalue == undefined) {
-						returnvalue = findComponent(fullQualifiedName, component.get('children').objectAt(i));
-					}
-				}
-				return returnvalue;
-			}
 			if(parent != undefined || parent != null){
 				const component = this.get('store').createRecord('component', {
 					"name": componentName,
@@ -470,32 +443,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 	newClazz(componentParentName, clazzName, application){
 		self = this;
 		if(componentParentName.length !== 0){
-			let parent = findComponent(componentParentName, application.get('components').objectAt(0));
-
-			function findComponent(fullQualifiedName, component){
-				let returnvalue;
-				for(let i = 0; i < component.get('children').length; i++){
-					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
-						if(component.get('children').objectAt(i).get('clazzes')){
-							for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
-								if((fullQualifiedName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
-									let cString = clazzName;
-									cString = cString.bold();
-									let pString = componentParentName;
-									pString = pString.bold();
-									self.showAlertifyMessage("there already is a class named " + cString + " in the component of " + pString);
-									return null;
-								}
-							}
-						}
-						return component.get('children').objectAt(i);
-					}
-					if(component.get('children').objectAt(i).get('children') && returnvalue == undefined){
-						returnvalue = findComponent(fullQualifiedName, component.get('children').objectAt(i));
-					}
-				}
-				return returnvalue;
-			}
+			let parent = findClazz(componentParentName, clazzName, componentParentName, application.get('components').objectAt(0));
 			if(parent != undefined || parent != null){
 				const clazz = this.get('store').createRecord('clazz', {
 					"name": clazzName,
@@ -516,20 +464,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 		
 		if(document.getElementById('nPComponentN').value.length !== 0){
 			let message = deleteComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
-
-			function deleteComponent(fullQualifiedName, component){
-				let returnvalue = "there was nothing found to be delted";
-				for(let i = 0; i < component.get('children').length; i++){
-					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
-						component.get('children').removeObject(component.get('children').objectAt(i));
-						let string = fullQualifiedName;
-						string = string.bold();
-						return string + " was deleted successfully";
-					}else{
-						returnvalue = deleteComponent(fullQualifiedName, component.get('children').objectAt(i));
-					}
-				}
-			}
 			this.showAlertifyMessage(message);
 		}
 		this.set('modellRepo.modellApplication', application);
@@ -540,28 +474,6 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 		if(document.getElementById('nPComponentN').value.length !== 0){
 			let message = deleteClazz(document.getElementById('nPComponentN').value, document.getElementById('nClazzN').value, application.get('components').objectAt(0));
-
-			function deleteClazz(fullQualifiedParentComponentName, clazzName, component){
-				let returnvalue = "there was nothing found to be delted";
-				for(let i = 0; i < component.get('children').length; i++){
-					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedParentComponentName){
-						if(component.get('children').objectAt(i).get('clazzes')){
-							for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
-								if((fullQualifiedParentComponentName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
-									component.get('children').objectAt(i).get('clazzes').removeObject(component.get('children').objectAt(i).get('clazzes').objectAt(j));
-									let string = fullQualifiedParentComponentName + "." + clazzName;
-									string = string.bold();
-									return string + " was deleted successfully";
-								}
-							}
-						}
-					}
-					if(component.get('children').objectAt(i).get('children')){
-						returnvalue = deleteClazz(fullQualifiedParentComponentName, clazzName, component.get('children').objectAt(i));
-					}
-				}
-				return returnvalue;
-			}
 			this.showAlertifyMessage(message);
 		}
 		this.set('modellRepo.modellApplication', application);
@@ -611,3 +523,89 @@ export default BaseRoute.extend(AlertifyHandler, {
 
 });
 
+function findComponent(fullQualifiedName, componentName, componentParentName, component){
+	let returnvalue;
+	for(let i = 0; i < component.get('children').length; i++){
+		if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
+			if(component.get('children').objectAt(i).get('children')){
+				for(let j =0; j < component.get('children').objectAt(i).get('children').length; j++){
+					if((fullQualifiedName + "." + componentName) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
+						let cString = componentName;
+						cString = cString.bold();
+						let pString = componentParentName;
+						pString = pString.bold();
+						self.showAlertifyMessage("there already is a component named " + cString + " in the component of " + pString);
+						return null;
+					}
+				}
+			}
+			return component.get('children').objectAt(i);
+		}
+		if(component.get('children').objectAt(i).get('children') && returnvalue == undefined) {
+			returnvalue = findComponent(fullQualifiedName, componentName, componentParentName, component.get('children').objectAt(i));
+		}
+	}
+	return returnvalue;
+}
+
+function findClazz(fullQualifiedName, clazzName, componentParentName, component){
+	let returnvalue;
+	for(let i = 0; i < component.get('children').length; i++){
+		if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
+			if(component.get('children').objectAt(i).get('clazzes')){
+				for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
+					if((fullQualifiedName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
+						let cString = clazzName;
+						cString = cString.bold();
+						let pString = componentParentName;
+						pString = pString.bold();
+						self.showAlertifyMessage("there already is a class named " + cString + " in the component of " + pString);
+						return null;
+					}
+				}
+			}
+			return component.get('children').objectAt(i);
+		}
+		if(component.get('children').objectAt(i).get('children') && returnvalue == undefined){
+			returnvalue = findClazz(fullQualifiedName, clazzName, componentParentName, component.get('children').objectAt(i));
+		}
+	}
+	return returnvalue;
+}
+
+function deleteComponent(fullQualifiedName, component){
+	let returnvalue = "there was nothing found to be deleted";
+	for(let i = 0; i < component.get('children').length; i++){
+		if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
+			component.get('children').removeObject(component.get('children').objectAt(i));
+			let string = fullQualifiedName;
+			string = string.bold();
+			return string + " was deleted successfully";
+		}else{
+			returnvalue = deleteComponent(fullQualifiedName, component.get('children').objectAt(i));
+		}
+	}
+	return returnvalue;
+}
+
+function deleteClazz(fullQualifiedParentComponentName, clazzName, component){
+	let returnvalue = "there was nothing found to be delted";
+	for(let i = 0; i < component.get('children').length; i++){
+		if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedParentComponentName){
+			if(component.get('children').objectAt(i).get('clazzes')){
+				for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
+					if((fullQualifiedParentComponentName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
+						component.get('children').objectAt(i).get('clazzes').removeObject(component.get('children').objectAt(i).get('clazzes').objectAt(j));
+						let string = fullQualifiedParentComponentName + "." + clazzName;
+						string = string.bold();
+						return string + " was deleted successfully";
+					}
+				}
+			}
+		}
+		if(component.get('children').objectAt(i).get('children')){
+			returnvalue = deleteClazz(fullQualifiedParentComponentName, clazzName, component.get('children').objectAt(i));
+		}
+	}
+	return returnvalue;
+}
