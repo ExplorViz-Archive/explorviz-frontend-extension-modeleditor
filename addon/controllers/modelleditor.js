@@ -149,11 +149,19 @@ export default Controller.extend({
 				this.get('popUpHandler').hideTooltip();
 
 				emberModel = intersectedViewObj.object.userData.model;
-				if(emberModel.get('parentComponent').get('fullQualifiedName')) {
-		    		document.getElementById('nPComponentN').value =  emberModel.get('fullQualifiedName');
-		    	}else{
-		    		document.getElementById('nPComponentN').value =  "";
-		    	}
+				const emberModelName = emberModel.constructor.modelName;
+
+				if(emberModelName === "component"){
+					if(emberModel.get('parentComponent').get('fullQualifiedName')) {
+						document.getElementById('nPComponentN').value =  emberModel.get('fullQualifiedName');
+					}else{
+						document.getElementById('nPComponentN').value =  "";
+					}
+			    }
+			    if(emberModelName === 'clazz'){
+			    	document.getElementById('nPComponentN').value =  emberModel.get('parent').get('fullQualifiedName');
+			    	document.getElementById('nClazzN').value = emberModel.get('name');
+			    }
 		    }
 	    	this.trigger('singleClick', emberModel);
 		};

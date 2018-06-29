@@ -382,11 +382,14 @@ export default BaseRoute.extend(AlertifyHandler, {
 		document.getElementById('cPA2').value = cPA1;
 	},
 
+	newComponentInput(application){
+		this.send('newComponent', document.getElementById('nPComponentN').value, document.getElementById('nCComponentN').value, application);
+	},
 
-	newComponent(application){
+	newComponent(componentParentName, componentName, application){
 		self = this;
-		if(document.getElementById('nPComponentN').value.length !== 0){
-			let parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+		if(componentParentName.length !== 0){
+			let parent = findComponent(componentParentName, application.get('components').objectAt(0));
 
 			function findComponent(fullQualifiedName, component){
 				let returnvalue;
@@ -394,10 +397,10 @@ export default BaseRoute.extend(AlertifyHandler, {
 					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
 						if(component.get('children').objectAt(i).get('children')){
 							for(let j =0; j < component.get('children').objectAt(i).get('children').length; j++){
-								if((fullQualifiedName + "." + document.getElementById('nCComponentN').value) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
-									let cString = document.getElementById('nCComponentN').value;
+								if((fullQualifiedName + "." + componentName) === component.get('children').objectAt(i).get('children').objectAt(j).get('fullQualifiedName')){
+									let cString = componentName;
 									cString = cString.bold();
-									let pString = document.getElementById('nPComponentN').value;
+									let pString = componentParentName;
 									pString = pString.bold();
 									self.showAlertifyMessage("there already is a component named " + cString + " in the component of " + pString);
 									return null;
@@ -414,8 +417,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 			}
 			if(parent != undefined || parent != null){
 				const component = this.get('store').createRecord('component', {
-					"name": document.getElementById('nCComponentN').value,
-					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nCComponentN').value,
+					"name": componentName,
+					"fullQualifiedName": parent.get('fullQualifiedName') + "." + componentName,
 					"parentComponent": parent,
 					"id": Math.floor(Math.random() * 100000 + 10000)
 				});
@@ -428,15 +431,15 @@ export default BaseRoute.extend(AlertifyHandler, {
 			//search for doubles
 			if(application.get('components').objectAt(0).get('children').length !== 0){
 				for(let i = 0; i < application.get('components').objectAt(0).get('children').length; i++){
-					if(application.get('components').objectAt(0).get('children').objectAt(i).get('fullQualifiedName') === document.getElementById('nCComponentN').value){
-						let cString = document.getElementById('nCComponentN').value;
+					if(application.get('components').objectAt(0).get('children').objectAt(i).get('fullQualifiedName') === componentName){
+						let cString = componentName;
 						cString = cString.bold();
 						self.showAlertifyMessage("there already is a component named " + cString);
 						break;
 					}else if(i === application.get('components').length - 1){
 						const component = this.get('store').createRecord('component', {
-							"name": document.getElementById('nCComponentN').value,
-							"fullQualifiedName": document.getElementById('nCComponentN').value,
+							"name": componentName,
+							"fullQualifiedName": componentName,
 							"parentComponent": application.get('components').objectAt(0),
 							"id": Math.floor(Math.random() * 100000 + 10000)
 						});
@@ -448,8 +451,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 				}
 			}else{
 				const component = this.get('store').createRecord('component', {
-					"name": document.getElementById('nCComponentN').value,
-					"fullQualifiedName": document.getElementById('nCComponentN').value,
+					"name": componentName,
+					"fullQualifiedName": componentName,
 					"parentComponent": application.get('components').objectAt(0),
 					"id": Math.floor(Math.random() * 100000 + 10000)
 				});
@@ -460,10 +463,14 @@ export default BaseRoute.extend(AlertifyHandler, {
 		}
 	},
 
-	newClazz(application){
+	newClazzInput(application){
+		this.send('newClazz', document.getElementById('nPComponentN').value, document.getElementById('nClazzN').value, application);
+	},
+
+	newClazz(componentParentName, clazzName, application){
 		self = this;
-		if(document.getElementById('nPComponentN').value.length !== 0){
-			let parent = findComponent(document.getElementById('nPComponentN').value, application.get('components').objectAt(0));
+		if(componentParentName.length !== 0){
+			let parent = findComponent(componentParentName, application.get('components').objectAt(0));
 
 			function findComponent(fullQualifiedName, component){
 				let returnvalue;
@@ -471,10 +478,10 @@ export default BaseRoute.extend(AlertifyHandler, {
 					if(component.get('children').objectAt(i).get('fullQualifiedName') === fullQualifiedName){
 						if(component.get('children').objectAt(i).get('clazzes')){
 							for(let j =0; j < component.get('children').objectAt(i).get('clazzes').length; j++){
-								if((fullQualifiedName + "." + document.getElementById('nClazzN').value) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
-									let cString = document.getElementById('nClazzN').value;
+								if((fullQualifiedName + "." + clazzName) === component.get('children').objectAt(i).get('clazzes').objectAt(j).get('fullQualifiedName')){
+									let cString = clazzName;
 									cString = cString.bold();
-									let pString = document.getElementById('nPComponentN').value;
+									let pString = componentParentName;
 									pString = pString.bold();
 									self.showAlertifyMessage("there already is a class named " + cString + " in the component of " + pString);
 									return null;
@@ -491,8 +498,8 @@ export default BaseRoute.extend(AlertifyHandler, {
 			}
 			if(parent != undefined || parent != null){
 				const clazz = this.get('store').createRecord('clazz', {
-					"name": document.getElementById('nClazzN').value,
-					"fullQualifiedName": parent.get('fullQualifiedName') + "." + document.getElementById('nClazzN').value,
+					"name": clazzName,
+					"fullQualifiedName": parent.get('fullQualifiedName') + "." + clazzName,
 					"parent": parent,
 					"instanceCount": 1,
 					"id": Math.floor(Math.random() * 100000 + 10000)
@@ -559,6 +566,41 @@ export default BaseRoute.extend(AlertifyHandler, {
 		}
 		this.set('modellRepo.modellApplication', application);
 		this.get('renderingService').redrawScene();
+	},
+
+	advanced(application){
+		if(document.getElementById('advanced').value === "only if you are advanced!"){
+			this.showAlertifyMessage("you are not advanced enough!");
+		}
+		//example input: test+testcom+aloha;test+testcom+means;test+testcom+family;hola;family+test
+		let input = document.getElementById('advanced').value.split(";");
+		let componentParentName, componentName, clazzName;
+		for(let inputelem = 0; inputelem < input.length; inputelem++){
+
+			input[inputelem] = input[inputelem].split("+");
+		}
+		for(let inputelem = 0; inputelem < input.length; inputelem++){
+			for(let creationelem = 0; creationelem < input[inputelem].length; creationelem++){
+				if(creationelem === 0){
+					componentParentName = "";
+				}else{
+					componentParentName = "";
+					for(let i = 0; i < creationelem; i++){
+						if(i > 0){
+							componentParentName += ".";
+						}
+						componentParentName += input[inputelem][i];
+					}
+				}
+				if(input[inputelem][creationelem].search("#") === -1){
+					componentName = input[inputelem][creationelem];
+					this.send('newComponent', componentParentName, componentName, application);
+				}else{
+					clazzName = input[inputelem][creationelem].slice(1);
+					this.send('newClazz', componentParentName, clazzName, application);
+				}
+			}
+		}
 	},
 
     resetRoute() {

@@ -46,15 +46,15 @@
       &emsp;<input id="cPA2" value="newApplicationName"><br>
     {{else}}
       <br>
-      &emsp;Parent Component:
+      &emsp;Parent Component:<br>
       &emsp;<input id="nPComponentN" value=""><br>
       <br>
-      &emsp;New Component:
+      &emsp;New Component:<br>
       &emsp;<input id="nCComponentN" value="newComponentName">
-      &emsp;<button id="bNComponentN" {{action 'newComponent' modellRepo.modellApplication}}>New Component</button><br>
-      &emsp;New Class:
+      &emsp;<button id="bNComponentN" {{action 'newComponentInput' modellRepo.modellApplication}}>New Component</button><br>
+      &emsp;New Class:<br>
       &emsp;<input id="nClazzN" value="newClassName">
-      &emsp;<button id="bNClazzN" {{action 'newClazz' modellRepo.modellApplication}}>New Class</button><br>
+      &emsp;<button id="bNClazzN" {{action 'newClazzInput' modellRepo.modellApplication}}>New Class</button><br>
       <br>
       <br>
       <br>
@@ -63,6 +63,20 @@
       <br>
       <br>
       &emsp;<button id="bDeleteClazz" {{action 'deleteClazz' modellRepo.modellApplication}}>Delete Class</button><br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      &emsp;Advanced Input:<br>
+      &emsp;<input id="advanced" value="only if you are advanced!"><button id="bAdvanced" style="display: none;" {{action 'advanced' modellRepo.modellApplication}}></button>
       <script>
       document.getElementById("nCComponentN").addEventListener("keyup", function(event) {
         event.preventDefault();
@@ -76,6 +90,13 @@
       if (event.keyCode === 13) {
         document.getElementById("bNClazzN").click();
       }
+      });
+
+      document.getElementById("advanced").addEventListener("keyup", function(event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+          document.getElementById("bAdvanced").click();
+        }
       });
       </script>
 
