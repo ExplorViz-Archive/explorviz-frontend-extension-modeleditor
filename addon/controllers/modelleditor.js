@@ -129,6 +129,42 @@ export default Controller.extend({
 			}
 	    });
 
+	    //this should be rightclicking and linking it to the second model
+	    //TODO: research what rightclicking is in this context
+	    
+		// this.get('landscapeInteraction').on('contextMenu', function(emberModel) {
+		// 	switch(emberModel.constructor.modelName){
+		// 		case "application":
+		// 			document.getElementById('cPS2').value = emberModel.get('parent').get('parent').get('parent').get('name');		
+		// 			document.getElementById('cPNG2').value = emberModel.get('parent').get('parent').get('name');		
+		// 			document.getElementById('cPN2').value = emberModel.get('parent').get('name');
+		// 			document.getElementById('cPA2').value = emberModel.get('name');		
+		// 			break;
+		// 		case "node":
+		// 			document.getElementById('cPS2').value = emberModel.get('parent').get('parent').get('name');		
+		// 			document.getElementById('cPNG2').value = emberModel.get('parent').get('name');		
+		// 			document.getElementById('cPN2').value = emberModel.get('name');
+		// 			document.getElementById('cPA2').value = "to be selected";		
+		// 			break;
+		// 		case "nodegroup":
+		// 			document.getElementById('cPS2').value = emberModel.get('parent').get('name');		
+		// 			document.getElementById('cPNG2').value = emberModel.get('name');		
+		// 			document.getElementById('cPN2').value = "to be selected";
+		// 			document.getElementById('cPA2').value = "to be selected";		
+		// 			break;
+		// 		case "system":
+		// 			document.getElementById('cPS2').value = emberModel.get('name');		
+		// 			document.getElementById('cPNG2').value = "to be selected";
+		// 			document.getElementById('cPN2').value = "to be selected";
+		// 			document.getElementById('cPA2').value = "to be selected";
+		// 			break;
+		// 		case "applicationcommunication":
+		// 			//alertify or debug or something
+		// 			break;
+		// 	}
+		// });
+	    
+
 	    const applicationInteraction = ApplicationInteraction.create(getOwner(this).ownerInjection());
 		applicationInteraction.handleSingleClick = function(mouse) {
 			const origin = {};
