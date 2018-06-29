@@ -409,7 +409,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 							cString = cString.bold();
 							self.showAlertifyMessage("there already is a component named " + cString);
 							break;
-						}else if(i === application.get('components').length - 1){
+						}else if(i === application.get('components').objectAt(0).get('children').length - 1){
 							const component = this.get('store').createRecord('component', {
 								"name": componentName,
 								"fullQualifiedName": componentName,
