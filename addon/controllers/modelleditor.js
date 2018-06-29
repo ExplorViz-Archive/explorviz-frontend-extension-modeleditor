@@ -39,8 +39,6 @@ export default Controller.extend({
   camZ: null,
   condition: null,
 
-
-  //why does show Landscape only request an application?
   showLandscape: computed('modellRepo.modellApplication', function() {
 	return !this.get('modellRepo.modellApplication');
   }),
@@ -97,27 +95,43 @@ export default Controller.extend({
 		this.get('landscapeInteraction').on('singleClick', function(emberModel) {
 			switch(emberModel.constructor.modelName){
 				case "application":
+					document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('parent').get('name');		
 					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('parent').get('name');		
+					document.getElementById('nNgN').value = emberModel.get('parent').get('parent').get('name');		
 					document.getElementById('cPNG1').value = emberModel.get('parent').get('parent').get('name');		
+					document.getElementById('nNN').value = emberModel.get('parent').get('name');
 					document.getElementById('cPN1').value = emberModel.get('parent').get('name');
+					document.getElementById('nAN').value = emberModel.get('name');		
 					document.getElementById('cPA1').value = emberModel.get('name');		
 					break;
 				case "node":
+					document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('name');		
 					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');		
+					document.getElementById('nNgN').value = emberModel.get('parent').get('name');		
 					document.getElementById('cPNG1').value = emberModel.get('parent').get('name');		
+					document.getElementById('nNN').value = emberModel.get('name');
 					document.getElementById('cPN1').value = emberModel.get('name');
+					document.getElementById('nAN').value = "to be selected";		
 					document.getElementById('cPA1').value = "to be selected";		
 					break;
 				case "nodegroup":
+					document.getElementById('nSN').value = emberModel.get('parent').get('name');		
 					document.getElementById('cPS1').value = emberModel.get('parent').get('name');		
+					document.getElementById('nNgN').value = emberModel.get('name');		
 					document.getElementById('cPNG1').value = emberModel.get('name');		
+					document.getElementById('nNN').value = "to be selected";
 					document.getElementById('cPN1').value = "to be selected";
+					document.getElementById('nAN').value = "to be selected";		
 					document.getElementById('cPA1').value = "to be selected";		
 					break;
 				case "system":
+					document.getElementById('nSN').value = emberModel.get('name');		
 					document.getElementById('cPS1').value = emberModel.get('name');		
+					document.getElementById('nNgN').value = "to be selected";
 					document.getElementById('cPNG1').value = "to be selected";
+					document.getElementById('nNN').value = "to be selected";
 					document.getElementById('cPN1').value = "to be selected";
+					document.getElementById('nAN').value = "to be selected";
 					document.getElementById('cPA1').value = "to be selected";
 					break;
 				case "applicationcommunication":

@@ -58,7 +58,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				landscape.save();
 				landscape.get('systems').addObject(system);
 				this.set('modellRepo.modellLandscape', landscape);
-				this.get('renderingService').redrawScene();
+				this.get('renderingService').reSetupScene();
 			}
 		},
 
@@ -90,7 +90,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						landscape.save();
 						this.set('modellRepo.modellLandscape', landscape);
 						changed = true;
-						this.get('renderingService').redrawScene();
+						this.get('renderingService').reSetupScene();
 						break;
 					}
 				}
@@ -151,7 +151,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 								node.get('applications').addObject(app);
 								landscape.save();
 								this.set('modellRepo.modellLandscape', landscape);
-								this.get('renderingService').redrawScene();
+								this.get('renderingService').reSetupScene();
 							}
 							changed = true;
 							break;
@@ -232,7 +232,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 						node.get('applications').addObject(app);
 						landscape.save();
 						this.set('modellRepo.modellLandscape', landscape);
-						this.get('renderingService').redrawScene();
+						this.get('renderingService').reSetupScene();
 					}else{break;}
 				}
 				
@@ -264,7 +264,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				this.set('modellRepo.modellLandscape', null);
 				this.get('renderingService').redrawScene();
 				this.set('modellRepo.modellLandscape', landscape);
-				this.get('renderingService').redrawScene();
+				this.get('renderingService').reSetupScene();
 			}
 		},
 
@@ -398,7 +398,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					parent.get('children').addObject(component);
 					//this.get('modelRepo.modellLandscape').save();
 					this.set('modellRepo.modellApplication', application);
-					this.get('renderingService').redrawScene();
+					this.get('renderingService').reSetupScene();
 				}
 			}else{
 				//search for doubles
@@ -418,7 +418,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 							});
 							application.get('components').objectAt(0).get('children').addObject(component);
 							this.set('modellRepo.modellApplication', application);
-							this.get('renderingService').redrawScene();
+							this.get('renderingService').reSetupScene();
 							break;
 						}
 					}
@@ -431,7 +431,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					});
 					application.get('components').objectAt(0).get('children').addObject(component);
 					this.set('modellRepo.modellApplication', application);
-					this.get('renderingService').redrawScene();
+					this.get('renderingService').reSetupScene();
 				}
 			}
 		},
@@ -455,7 +455,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					parent.get('clazzes').addObject(clazz);
 					//this.get('modelRepo.modellLandscape').save();
 					this.set('modellRepo.modellApplication', application);
-					this.get('renderingService').redrawScene();
+					this.get('renderingService').reSetupScene();
 				}
 			}			
 		},
@@ -467,7 +467,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				this.showAlertifyMessage(message);
 			}
 			this.set('modellRepo.modellApplication', application);
-			this.get('renderingService').redrawScene();
+			this.get('renderingService').reSetupScene();
 		},
 
 		deleteClazz(application){
@@ -477,7 +477,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 				this.showAlertifyMessage(message);
 			}
 			this.set('modellRepo.modellApplication', application);
-			this.get('renderingService').redrawScene();
+			this.get('renderingService').reSetupScene();
 		},
 
 		advanced(application){

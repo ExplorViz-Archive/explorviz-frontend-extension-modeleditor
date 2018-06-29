@@ -10,73 +10,71 @@
   {{visualization/rendering/application-rendering latestApplication=modellRepo.modellApplication interaction=applicationInteraction}}
 {{/if}}
 </div>
-<div class="buttonMenu">
-	<div class="buttonContainer">
+<div class="buttonMenu"  style="overflow: auto" >
+	<div class="buttonContainer" >
     {{#if showLandscape}}
       <br>
-      &emsp;<input id="nMN" type=number value="42">
-      &emsp;<button id="bNMN" {{action 'newModel' modellRepo.modellLandscape}}>New Model</button><br>
-      &emsp;<input id="nSN" value="newSystemName">
-      &emsp;<button id="bNSN" {{action 'newSystem' modellRepo.modellLandscape}}>New System</button><br>
-      &emsp;<input id="nNgN" value="newNodegroupName">
-      &emsp;<button id="bNNgN" {{action 'newNodegroup' modellRepo.modellLandscape}}>New Nodegroup</button><br>
-      &emsp;<input id="nNN" value="newNodeName">
-      &emsp;<button id="bNNN" {{action 'newNode' modellRepo.modellLandscape}}>New Node</button><br>
-      &emsp;<input id="nAN" value="newApplicationName">
-      &emsp;<button id="bNAN" {{action 'newApplication' modellRepo.modellLandscape}}>New Application</button><br>
+      &emsp;<input id="nSN" type="text" class="form-control" value="newSystemName">
+      &emsp;<button id="bNSN" class="btn btn-default" {{action 'newSystem' modellRepo.modellLandscape}}>New System</button><br>
+      &emsp;<input id="nNgN" type="text" class="form-control" value="newNodegroupName">
+      &emsp;<button id="bNNgN" class="btn btn-default" {{action 'newNodegroup' modellRepo.modellLandscape}}>New Nodegroup</button><br>
+      &emsp;<input id="nNN" type="text" class="form-control" value="newNodeName">
+      &emsp;<button id="bNNN" class="btn btn-default" {{action 'newNode' modellRepo.modellLandscape}}>New Node</button><br>
+      &emsp;<input id="nAN" type="text" class="form-control" value="newApplicationName">
+      &emsp;<button id="bNAN" class="btn btn-default" {{action 'newApplication' modellRepo.modellLandscape}}>New Application</button><br>
       <br>
-      &emsp;<button id="bD" {{action 'delete' modellRepo.modellLandscape}}>Delete System</button><br>
-      <br>
-      <br>
-      <br>
-      <br>
+      &emsp;<button id="bD" class="btn btn-danger" {{action 'delete' modellRepo.modellLandscape}}>Delete System</button><br>
       <br>
       &emsp;CommunicationPartner1:<br>
-      &emsp;<input id="cPS1" value="newSystemName"><br>
-      &emsp;<input id="cPNG1" value="newNodegroupName"><br>
-      &emsp;<input id="cPN1" value="newNodeName"><br>
-      &emsp;<input id="cPA1" value="newApplicationName"><br>
+      &emsp;<input id="cPS1" type="text" class="form-control" value="newSystemName">
+      &emsp;<input id="cPNG1" type="text" class="form-control" value="newNodegroupName">
+      &emsp;<input id="cPN1" type="text" class="form-control" value="newNodeName">
+      &emsp;<input id="cPA1" type="text" class="form-control" value="newApplicationName">
       <br>
-      &emsp;<button id="bNAN" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button>&emsp;<button id="bNAN" {{action 'switchComP'}}>Switch Partner</button><br>
+      &emsp;<button id="bNAN" class="btn btn-warning" {{action 'communicationActivate' modellRepo.modellLandscape}}>Communication ACTIVATE</button>&emsp;<button id="bNAN" class="btn btn-info" {{action 'switchComP'}}>Switch Partner</button><br>
       <br>
       &emsp;CommunicationPartner2:<br>
-      &emsp;<input id="cPS2" value="newSystemName"><br>
-      &emsp;<input id="cPNG2" value="newNodegroupName"><br>
-      &emsp;<input id="cPN2" value="newNodeName"><br>
-      &emsp;<input id="cPA2" value="newApplicationName"><br>
+      &emsp;<input id="cPS2" type="text" class="form-control" value="newSystemName">
+      &emsp;<input id="cPNG2" type="text" class="form-control" value="newNodegroupName">
+      &emsp;<input id="cPN2" type="text" class="form-control" value="newNodeName">
+      &emsp;<input id="cPA2" type="text" class="form-control" value="newApplicationName"><br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
     {{else}}
       <br>
       &emsp;Parent Component:<br>
-      &emsp;<input id="nPComponentN" value=""><br>
+      &emsp;<input id="nPComponentN" type="text" class="form-control" value=""><br>
       <br>
       &emsp;New Component:<br>
-      &emsp;<input id="nCComponentN" value="newComponentName">
-      &emsp;<button id="bNComponentN" {{action 'newComponentInput' modellRepo.modellApplication}}>New Component</button><br>
+      &emsp;<input id="nCComponentN" type="text" class="form-control" value="newComponentName">
+      &emsp;<button id="bNComponentN" class="btn btn-default" {{action 'newComponentInput' modellRepo.modellApplication}}>New Component</button><br>
       &emsp;New Class:<br>
-      &emsp;<input id="nClazzN" value="newClassName">
-      &emsp;<button id="bNClazzN" {{action 'newClazzInput' modellRepo.modellApplication}}>New Class</button><br>
+      &emsp;<input id="nClazzN" type="text" class="form-control" value="newClassName">
+      &emsp;<button id="bNClazzN" class="btn btn-default" {{action 'newClazzInput' modellRepo.modellApplication}}>New Class</button><br>
       <br>
       <br>
       <br>
-      &emsp;<button id="bDeleteComponent" {{action 'deleteComponent' modellRepo.modellApplication}}>Delete Parent Component</button><br>
+      &emsp;<button id="bDeleteComponent" class="btn btn-danger" {{action 'deleteComponent' modellRepo.modellApplication}}>Delete Parent Component</button><br>
       <br>
       <br>
       <br>
-      &emsp;<button id="bDeleteClazz" {{action 'deleteClazz' modellRepo.modellApplication}}>Delete Class</button><br>
+      &emsp;<button id="bDeleteClazz" class="btn btn-danger" {{action 'deleteClazz' modellRepo.modellApplication}}>Delete Class</button><br>
       <br>
       <br>
       <br>
-      &emsp;<button id="landscapeView" {{action 'switchLandscape'}}>Go Back to LandscapeView</button><br>
-      <br>
-      <br>
-      <br>
-      <br>
-      <br>
+      &emsp;<button id="landscapeView" class="btn btn-info" {{action 'switchLandscape'}}>Go Back to LandscapeView</button><br>
       <br>
       <br>
       <br>
       &emsp;Advanced Input:<br>
-      &emsp;<input id="advanced" value="only if you are advanced!"><button id="bAdvanced" style="display: none;" {{action 'advanced' modellRepo.modellApplication}}></button>
+      &emsp;<input id="advanced" type="text" class="form-control" value="only if you are advanced!"><button id="bAdvanced" style="display: none;" {{action 'advanced' modellRepo.modellApplication}}></button>
       <script>
       document.getElementById("nCComponentN").addEventListener("keyup", function(event) {
         event.preventDefault();
