@@ -2,6 +2,7 @@
   float: left;
   height: 100%;
   width: 20%;
+  overflow: auto; 
   background-color: rgb(220,220,220);
 }
 

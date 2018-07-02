@@ -5,14 +5,32 @@
 
 <div class="canvas">
 {{#if showLandscape}}
+  {{visualization/page-setup/visualization-navbar
+    content=(array 
+      (component "visualization/page-setup/navbar/reset-visualization") 
+      (component "visualization/page-setup/navbar/file-downloader" 
+        urlPath=exportLandscapeUrl fileName=exportLandscapeFileName) 
+      (component "visualization/page-setup/navbar/file-uploader" 
+        backendURL=uploadLandscapeUrl) 
+    )
+  }}
   {{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}
 {{else}}
+  {{visualization/page-setup/visualization-navbar
+    content=(array 
+      (component "visualization/page-setup/navbar/reset-visualization") 
+      (component "visualization/page-setup/navbar/file-downloader" 
+        urlPath=exportLandscapeUrl fileName=exportLandscapeFileName) 
+      (component "visualization/page-setup/navbar/application-opener") 
+      (component "visualization/page-setup/navbar/application-search")
+    )
+  }}
   {{visualization/rendering/application-rendering latestApplication=modellRepo.modellApplication interaction=applicationInteraction}}
 {{/if}}
 </div>
-<div class="buttonMenu"  style="overflow: auto" >
+<div class="buttonMenu">
 	<div class="buttonContainer" >
-    {{#if showLandscape}}
+    {{#if showLandscape}} 
       <br>
       &emsp;<input id="nSN" type="text" class="form-control" value="newSystemName">
       &emsp;<button id="bNSN" class="btn btn-default" {{action 'newSystem' modellRepo.modellLandscape}}>New System</button><br>
