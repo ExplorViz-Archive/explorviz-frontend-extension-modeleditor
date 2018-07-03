@@ -150,9 +150,9 @@ export default BaseRoute.extend(AlertifyHandler, {
 								});
 								node.get('applications').addObject(app);
 								landscape.save();
-								this.set('modellRepo.modellLandscape', landscape);
-								this.get('renderingService').reSetupScene();
 							}
+							this.set('modellRepo.modellLandscape', landscape);
+							this.get('renderingService').reSetupScene(); 
 							changed = true;
 							break;
 						}

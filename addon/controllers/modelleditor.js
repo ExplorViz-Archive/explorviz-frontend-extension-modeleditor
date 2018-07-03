@@ -21,6 +21,7 @@ export default Controller.extend({
   reloadHandler: service("reload-handler"),
   renderingService: service("rendering-service"),
   modellRepo: service('modell-repository'),
+  highlighter: service('visualization/application/highlighter'),
   //landscapeRepo: service('repos/landscape-repository'),
   store: service(),
 
@@ -199,16 +200,18 @@ export default Controller.extend({
 				const emberModelName = emberModel.constructor.modelName;
 
 				if(emberModelName === "component"){
-					if(emberModel.get('parentComponent').get('fullQualifiedName')) {
+					if(emberModel.get('foundation') === false) {
 						document.getElementById('nPComponentN').value =  emberModel.get('fullQualifiedName');
 					}else{
 						document.getElementById('nPComponentN').value =  "";
 					}
-				}
-				if(emberModelName === 'clazz'){
+				}else if(emberModelName === 'clazz'){
 					document.getElementById('nPComponentN').value =  emberModel.get('parent').get('fullQualifiedName');
 					document.getElementById('nClazzN').value = emberModel.get('name');
 				}
+			}else{
+				this.get('highlighter').unhighlightAll();
+				this.get('renderingService').redrawScene();
 			}
 			this.trigger('singleClick', emberModel);
 		};
