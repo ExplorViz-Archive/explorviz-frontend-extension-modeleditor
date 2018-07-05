@@ -210,30 +210,35 @@ export default BaseRoute.extend(AlertifyHandler, {
 			}
 
 			if(nodegroupfound === true){
-				for(let k = 0; k < nodegroup.get('nodes').length; k++){	
-					for(let h = 0; h < nodegroup.get('nodes').objectAt(k).get('applications').length; h++){
-						if(nodegroup.get('nodes').objectAt(k).get('applications').objectAt(h).name === document.getElementById('nAN').value){
-							let string = document.getElementById('nAN').value;
-							string = string.bold();
-							this.showAlertifyMessage("There is already an application named " + string + " in that nodegroup.");
-							foundDouble = true;
-							break;
+				if(nodegroup.get('nodes').length > 0){
+					for(let k = 0; k < nodegroup.get('nodes').length; k++){	
+						for(let h = 0; h < nodegroup.get('nodes').objectAt(k).get('applications').length; h++){
+							if(nodegroup.get('nodes').objectAt(k).get('applications').objectAt(h).name === document.getElementById('nAN').value){
+								let string = document.getElementById('nAN').value;
+								string = string.bold();
+								this.showAlertifyMessage("There is already an application named " + string + " in that nodegroup.");
+								foundDouble = true;
+								break;
+							}
 						}
+						if(foundDouble === false){
+							const node = nodegroup.get('nodes').objectAt(k);
+							const app = this.get('store').createRecord('application', {
+								"name": document.getElementById("nAN").value,
+								"parent": node,
+								"programmingLanguage": "Java",
+								"lastUsage": Date.now(),
+								"id": Math.floor(Math.random() * 100000 + 10000)
+							});
+							node.get('applications').addObject(app);
+							landscape.save();
+							this.set('modellRepo.modellLandscape', landscape);
+							this.get('renderingService').reSetupScene();
+						}else{break;}
 					}
-					if(foundDouble === false){
-						const node = nodegroup.get('nodes').objectAt(k);
-						const app = this.get('store').createRecord('application', {
-							"name": document.getElementById("nAN").value,
-							"parent": node,
-							"programmingLanguage": "Java",
-							"lastUsage": Date.now(),
-							"id": Math.floor(Math.random() * 100000 + 10000)
-						});
-						node.get('applications').addObject(app);
-						landscape.save();
-						this.set('modellRepo.modellLandscape', landscape);
-						this.get('renderingService').reSetupScene();
-					}else{break;}
+				}else{
+					this.send('newNode', landscape);
+					this.send('newApplication', landscape);
 				}
 				
 			}

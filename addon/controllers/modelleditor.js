@@ -4,6 +4,7 @@ import { computed } from '@ember/object';
 import { getOwner } from '@ember/application';
 import LandscapeInteraction from 'explorviz-frontend/utils/landscape-rendering/interaction';
 import ApplicationInteraction from 'explorviz-frontend/utils/application-rendering/interaction';
+import ENV from 'explorviz-frontend/config/environment';
 
 /**
 * TODO
@@ -24,6 +25,8 @@ export default Controller.extend({
   highlighter: service('visualization/application/highlighter'),
   //landscapeRepo: service('repos/landscape-repository'),
   store: service(),
+
+  replayModels:null,
 
   state: null,
 
@@ -94,50 +97,52 @@ export default Controller.extend({
 		this.set('landscapeInteraction', landscapeInteraction);
 
 		this.get('landscapeInteraction').on('singleClick', function(emberModel) {
-			switch(emberModel.constructor.modelName){
-				case "application":
-					document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('parent').get('name');		
-					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('parent').get('name');		
-					document.getElementById('nNgN').value = emberModel.get('parent').get('parent').get('name');		
-					document.getElementById('cPNG1').value = emberModel.get('parent').get('parent').get('name');		
-					document.getElementById('nNN').value = emberModel.get('parent').get('name');
-					document.getElementById('cPN1').value = emberModel.get('parent').get('name');
-					document.getElementById('nAN').value = emberModel.get('name');		
-					document.getElementById('cPA1').value = emberModel.get('name');		
-					break;
-				case "node":
-					document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('name');		
-					document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');		
-					document.getElementById('nNgN').value = emberModel.get('parent').get('name');		
-					document.getElementById('cPNG1').value = emberModel.get('parent').get('name');		
-					document.getElementById('nNN').value = emberModel.get('name');
-					document.getElementById('cPN1').value = emberModel.get('name');
-					document.getElementById('nAN').value = "to be selected";		
-					document.getElementById('cPA1').value = "to be selected";		
-					break;
-				case "nodegroup":
-					document.getElementById('nSN').value = emberModel.get('parent').get('name');		
-					document.getElementById('cPS1').value = emberModel.get('parent').get('name');		
-					document.getElementById('nNgN').value = emberModel.get('name');		
-					document.getElementById('cPNG1').value = emberModel.get('name');		
-					document.getElementById('nNN').value = "to be selected";
-					document.getElementById('cPN1').value = "to be selected";
-					document.getElementById('nAN').value = "to be selected";		
-					document.getElementById('cPA1').value = "to be selected";		
-					break;
-				case "system":
-					document.getElementById('nSN').value = emberModel.get('name');		
-					document.getElementById('cPS1').value = emberModel.get('name');		
-					document.getElementById('nNgN').value = "to be selected";
-					document.getElementById('cPNG1').value = "to be selected";
-					document.getElementById('nNN').value = "to be selected";
-					document.getElementById('cPN1').value = "to be selected";
-					document.getElementById('nAN').value = "to be selected";
-					document.getElementById('cPA1').value = "to be selected";
-					break;
-				case "applicationcommunication":
-					//alertify or debug or something
-					break;
+			if(emberModel){
+				switch(emberModel.constructor.modelName){
+					case "application":
+						document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('parent').get('name');		
+						document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('parent').get('name');		
+						document.getElementById('nNgN').value = emberModel.get('parent').get('parent').get('name');		
+						document.getElementById('cPNG1').value = emberModel.get('parent').get('parent').get('name');		
+						document.getElementById('nNN').value = emberModel.get('parent').get('name');
+						document.getElementById('cPN1').value = emberModel.get('parent').get('name');
+						document.getElementById('nAN').value = emberModel.get('name');		
+						document.getElementById('cPA1').value = emberModel.get('name');		
+						break;
+					case "node":
+						document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('name');		
+						document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');		
+						document.getElementById('nNgN').value = emberModel.get('parent').get('name');		
+						document.getElementById('cPNG1').value = emberModel.get('parent').get('name');		
+						document.getElementById('nNN').value = emberModel.get('name');
+						document.getElementById('cPN1').value = emberModel.get('name');
+						document.getElementById('nAN').value = "to be selected";		
+						document.getElementById('cPA1').value = "to be selected";		
+						break;
+					case "nodegroup":
+						document.getElementById('nSN').value = emberModel.get('parent').get('name');		
+						document.getElementById('cPS1').value = emberModel.get('parent').get('name');		
+						document.getElementById('nNgN').value = emberModel.get('name');		
+						document.getElementById('cPNG1').value = emberModel.get('name');		
+						document.getElementById('nNN').value = "to be selected";
+						document.getElementById('cPN1').value = "to be selected";
+						document.getElementById('nAN').value = "to be selected";		
+						document.getElementById('cPA1').value = "to be selected";		
+						break;
+					case "system":
+						document.getElementById('nSN').value = emberModel.get('name');		
+						document.getElementById('cPS1').value = emberModel.get('name');		
+						document.getElementById('nNgN').value = "to be selected";
+						document.getElementById('cPNG1').value = "to be selected";
+						document.getElementById('nNN').value = "to be selected";
+						document.getElementById('cPN1').value = "to be selected";
+						document.getElementById('nAN').value = "to be selected";
+						document.getElementById('cPA1').value = "to be selected";
+						break;
+					case "applicationcommunication":
+						//alertify or debug or something
+						break;
+				}
 			}
 		});
 
@@ -217,6 +222,29 @@ export default Controller.extend({
 		};
 		this.set('applicationInteraction', applicationInteraction);
 
+	},
+	exportLandscapeUrl: computed(function() {
+		const currentTimestamp = this.get('modellRepo.modellLandscape').get('timestamp');
+		return `/landscape/export-model/${currentTimestamp}`;
+	}),
+
+	exportLandscapeFileName: computed(function() {
+		const currentLandscape = this.get('modellRepo.modellLandscape');
+		const currentTimestamp = currentLandscape.get('timestamp');
+		return `model-${currentTimestamp}.expl`
+	}),
+
+	uploadLandscapeUrl: computed(function() {    
+		return `${ENV.APP.API_ROOT}/landscape/upload-model`;
+	}),
+
+	//TODO: fill the array "replayModels" with the returned sh*t
+	fillDropdownUrl: computed(function() {    
+		return `/landscape/fill-dropdown`;
+	}),
+
+	fill_dropdown(content){
+		replayModels = content;
 	},
 
 	actions: {

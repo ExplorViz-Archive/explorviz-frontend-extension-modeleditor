@@ -5,7 +5,7 @@ module.exports = {
   
   included: function(app) {
     this._super.included.apply(this, arguments);    
-    app.import('vendor/style.css');
+    app.import('vendor/explorviz-frontend-extension-modelleditor-style.css');
   },
 
   isDevelopingAddon() {

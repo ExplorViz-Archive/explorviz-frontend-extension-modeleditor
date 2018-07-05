@@ -1,8 +1,3 @@
-<head>
-<link rel="stylesheet" type="text/css" href="../../vendor/style.css">
-</head>
-
-
 <div class="canvas">
 {{#if showLandscape}}
   {{visualization/page-setup/visualization-navbar
@@ -12,12 +7,14 @@
         urlPath=exportLandscapeUrl fileName=exportLandscapeFileName) 
       (component "visualization/page-setup/navbar/file-uploader" 
         backendURL=uploadLandscapeUrl) 
+      (component "model-dropdown") 
     )
   }}
   {{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}
 {{else}}
   {{visualization/page-setup/visualization-navbar
     content=(array 
+      (component "navbar-resetview") 
       (component "visualization/page-setup/navbar/reset-visualization") 
       (component "visualization/page-setup/navbar/file-downloader" 
         urlPath=exportLandscapeUrl fileName=exportLandscapeFileName) 
@@ -86,8 +83,6 @@
       &emsp;<button id="bDeleteClazz" class="btn btn-danger" {{action 'deleteClazz' modellRepo.modellApplication}}>Delete Class</button><br>
       <br>
       <br>
-      <br>
-      &emsp;<button id="landscapeView" class="btn btn-info" {{action 'switchLandscape'}}>Go Back to LandscapeView</button><br>
       <br>
       <br>
       <br>
