@@ -231,21 +231,16 @@ export default Controller.extend({
 	exportLandscapeFileName: computed(function() {
 		const currentLandscape = this.get('modellRepo.modellLandscape');
 		const currentTimestamp = currentLandscape.get('timestamp');
-		return `model-${currentTimestamp}.expl`
+		return `${currentTimestamp}-1337.expl`
 	}),
 
-	uploadLandscapeUrl: computed(function() {    
+	uploadLandscapeUrl: computed(function() { 
 		return `${ENV.APP.API_ROOT}/landscape/upload-model`;
 	}),
 
-	//TODO: fill the array "replayModels" with the returned sh*t
-	fillDropdownUrl: computed(function() {    
+	fillDropdownUrl: computed(function() {  
 		return `/landscape/fill-dropdown`;
 	}),
-
-	fill_dropdown(content){
-		replayModels = content;
-	},
 
 	actions: {
 

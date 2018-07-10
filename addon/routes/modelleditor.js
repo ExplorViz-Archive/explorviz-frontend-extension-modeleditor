@@ -55,7 +55,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					"id": Math.floor(Math.random() * 100000 + 10000)
 				});	
 				this.get('controller.model.systems').addObject(system);
-				landscape.save();
+				this.get('modellRepo.modellLandscape').save();
 				landscape.get('systems').addObject(system);
 				this.set('modellRepo.modellLandscape', landscape);
 				this.get('renderingService').reSetupScene();

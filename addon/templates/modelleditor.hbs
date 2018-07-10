@@ -7,7 +7,7 @@
         urlPath=exportLandscapeUrl fileName=exportLandscapeFileName) 
       (component "visualization/page-setup/navbar/file-uploader" 
         backendURL=uploadLandscapeUrl) 
-      (component "model-dropdown") 
+      (component "model-dropdown" replayModels=fillDropdownUrl) 
     )
   }}
   {{visualization/rendering/landscape-rendering latestLandscape=modellRepo.modellLandscape interaction=landscapeInteraction}}

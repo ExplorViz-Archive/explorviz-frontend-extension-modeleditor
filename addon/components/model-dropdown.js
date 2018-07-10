@@ -1,25 +1,49 @@
 import Component from '@ember/component';
 import layout from '../templates/components/model-dropdown';
+import Service from '@ember/service';
+import ENV from 'explorviz-frontend/config/environment';
+import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
+import { inject as service } from "@ember/service";
+import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 
-export default Component.extend({
+
+export default Component.extend(AlertifyHandler, {
 	layout,
 
 	replayModels: null,
+	modellRepo: service('modell-repository'),
+	store: service(),
 
-	fillDropdown(){
+	session: service(),
+	ajax: service('ajax'),
+
+	init(){
+		this._super(...arguments);
+		this.getListFromBackend();
+	},
+
+	didRender(){
+		this._super(...arguments);
+		this.getListFromBackend();
+	},
+
+	getListFromBackend(){
 		const { access_token } = this.get('session.data.authenticated');
-		const url = `${ENV.APP.API_ROOT}${urlPath}`
+
+		const self = this;
+
+		const url = `${ENV.APP.API_ROOT}${'/landscape/fill-dropdown'}`
 
 		this.get('ajax').raw(url, {
 			'id': this,
 			headers: { 'Authorization': `Basic ${access_token}` },
-			dataType: 'text',
+			dataType: 'json',
 			options: {
 				arraybuffer: true
 			}
 		}
 		).then((content) => {
-			this.fill_dropdown(content.payload);
+			self.set('replayModels', content.payload);
 		}).catch((error) => {
 
 			this.debug("Could not download file", error);
@@ -27,6 +51,44 @@ export default Component.extend({
 
 		});
 	},
+
+	setModellLandscape(nameOfModel){
+		const self = this;
+
+		console.log(nameOfModel.split("-")[0]);
+		this.debug("start landscape-request");
+		this.get("store").queryRecord('landscape', 'modelLandscape/' + nameOfModel.split("-")[0])
+			.then(success, failure).catch(error);
+
+		//--------------inner functions--------------
+		function success(landscape){
+			self.set('modellRepo.modellLandscape', null);
+			self.debug("end landscape-request");
+			self.set('modellRepo.modellLandscape', landscape);
+			self.get('modellRepo').triggerUpdate();
+		}
+
+		function failure(e){
+			self.showAlertifyMessage("Landscape couldn't be requested!" +
+			" Backend offline?");
+			self.debug("Landscape couldn't be requested!", e);
+		}
+
+
+		function error(e){
+			self.debug("Error when fetching landscape: ", e);
+		}
+		//------------End of inner functions------------
+
+	},
+
+	actions: {
+
+		select(data) {
+			this.setModellLandscape(data);
+		}
+
+	}
 
 
   
