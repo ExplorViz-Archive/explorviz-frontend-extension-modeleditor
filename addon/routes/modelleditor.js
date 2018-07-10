@@ -125,7 +125,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					if(system.get('nodegroups').objectAt(j).name === document.getElementById("nNgN").value){
 						nodegroup = system.get('nodegroups').objectAt(j);
 						for(let k = 0; k < nodegroup.get('nodes').length; k++){
-							if(nodegroup.get('nodes').objectAt(k).name === document.getElementById('nNN').value){
+							if(nodegroup.get('nodes').objectAt(k).getDisplayName === document.getElementById('nNN').value){
 								this.showAlertifyMessage("You cannot have two nodes with the exact same name within one nodegroup.");
 								foundDouble = true;
 								changed = true;

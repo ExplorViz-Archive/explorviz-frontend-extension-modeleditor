@@ -100,12 +100,21 @@ export default Controller.extend({
 			if(emberModel){
 				switch(emberModel.constructor.modelName){
 					case "application":
-						document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('parent').get('name');		
-						document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('parent').get('name');		
-						document.getElementById('nNgN').value = emberModel.get('parent').get('parent').get('name');		
-						document.getElementById('cPNG1').value = emberModel.get('parent').get('parent').get('name');		
-						document.getElementById('nNN').value = emberModel.get('parent').get('name');
-						document.getElementById('cPN1').value = emberModel.get('parent').get('name');
+						//this content is very black magic!, only through debugging and try and error did I, Tim Hackel, find this work around
+						//tried I have: 														results:
+						//				- emberModel.get('parent').get('getDisplayName')			->	the actual code of the function implementation
+						//				- emberModel.get('parent').get('getDisplayName()')			->	undefined
+						//				- emberModel.get('parent').getDisplayName()					->	getDisplayName is not a function
+						//				- emberModel.get('parent').getDisplayName					->	undefined
+						//				- emberModel.get('parent.getDisplayName')					->	undefined
+						//				- emberModel.get('parent.getDisplayName()')					->	undefined
+						let node = emberModel.get('parent').content;
+						document.getElementById('nSN').value = node.get('parent').get('parent').get('name');		
+						document.getElementById('cPS1').value = node.get('parent').get('parent').get('name');		
+						document.getElementById('nNgN').value = node.get('parent').get('name');		
+						document.getElementById('cPNG1').value = node.get('parent').get('name');
+						document.getElementById('nNN').value = node.getDisplayName();
+						document.getElementById('cPN1').value = node.getDisplayName();
 						document.getElementById('nAN').value = emberModel.get('name');		
 						document.getElementById('cPA1').value = emberModel.get('name');		
 						break;
@@ -114,8 +123,8 @@ export default Controller.extend({
 						document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');		
 						document.getElementById('nNgN').value = emberModel.get('parent').get('name');		
 						document.getElementById('cPNG1').value = emberModel.get('parent').get('name');		
-						document.getElementById('nNN').value = emberModel.get('name');
-						document.getElementById('cPN1').value = emberModel.get('name');
+						document.getElementById('nNN').value = emberModel.getDisplayName();
+						document.getElementById('cPN1').value = emberModel.getDisplayName();
 						document.getElementById('nAN').value = "to be selected";		
 						document.getElementById('cPA1').value = "to be selected";		
 						break;
