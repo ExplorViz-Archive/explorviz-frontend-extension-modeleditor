@@ -234,7 +234,8 @@ export default Controller.extend({
 	},
 	exportLandscapeUrl: computed(function() {
 		const currentTimestamp = this.get('modellRepo.modellLandscape').get('timestamp');
-		return `/landscape/export-model/${currentTimestamp}`;
+		const overallCalls = this.get('modellRepo.modellLandscape').get('overallCalls');
+		return `/landscape/export-model/${currentTimestamp}-${overallCalls}`;
 	}),
 
 	exportLandscapeFileName: computed(function() {
