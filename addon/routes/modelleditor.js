@@ -125,7 +125,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					if(system.get('nodegroups').objectAt(j).name === document.getElementById("nNgN").value){
 						nodegroup = system.get('nodegroups').objectAt(j);
 						for(let k = 0; k < nodegroup.get('nodes').length; k++){
-							if(nodegroup.get('nodes').objectAt(k).getDisplayName === document.getElementById('nNN').value){
+							if(nodegroup.get('nodes').objectAt(k).getDisplayName() === document.getElementById('nNN').value){
 								this.showAlertifyMessage("You cannot have two nodes with the exact same name within one nodegroup.");
 								foundDouble = true;
 								changed = true;
@@ -283,7 +283,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					for(let j=0; j<landscape.get('systems').objectAt(i).get('nodegroups').length; j++){
 						if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).name === document.getElementById('cPNG1').value){
 							for(let k =0; k<landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').length; k++){
-								if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).name === document.getElementById('cPN1').value){
+								if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).getDisplayName() === document.getElementById('cPN1').value){
 									for(let l=0; l < landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length;l++){
 										if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l).name === document.getElementById('cPA1').value){
 											application1 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
@@ -318,7 +318,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 					for(let j=0; j<landscape.get('systems').objectAt(i).get('nodegroups').length; j++){
 						if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).name === document.getElementById('cPNG2').value){
 							for(let k =0; k<landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').length; k++){
-								if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).name === document.getElementById('cPN2').value){
+								if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).getDisplayName() === document.getElementById('cPN2').value){
 									for(let l=0; l < landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').length;l++){
 										if(landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l).name === document.getElementById('cPA2').value){
 											application2 = landscape.get('systems').objectAt(i).get('nodegroups').objectAt(j).get('nodes').objectAt(k).get('applications').objectAt(l);
@@ -348,23 +348,27 @@ export default BaseRoute.extend(AlertifyHandler, {
 			}
 
 			//make them communicate via outgoingApplicationCommunications and inverse: 'sourceApplication'
-			const communication1 = this.get('store').createRecord('applicationcommunication', {
-				"requests": 100,
-				"averageResponseTime": Math.floor(Math.random() * 50),
-				"id": Math.floor(Math.random() * 100000 + 10000),
-				"technology": "PERL",
+			if(application1 != null && application2 != null){
+				const communication1 = this.get('store').createRecord('applicationcommunication', {
+					"requests": 100,
+					"averageResponseTime": Math.floor(Math.random() * 50),
+					"id": Math.floor(Math.random() * 100000 + 10000),
+					"technology": "PERL",
 
-				"sourceApplication": application1,
+					"sourceApplication": application1,
 
-				"targetApplication": application2
-			});
-			application1.get('outgoingApplicationCommunications').addObject(communication1);
+					"targetApplication": application2
+				});
+				application1.get('outgoingApplicationCommunications').addObject(communication1);
 
-			landscape.get('outgoingApplicationCommunications').addObject(communication1);
+				landscape.get('outgoingApplicationCommunications').addObject(communication1);
 
-			landscape.save();
-			this.set('modellRepo.modellLandscape', landscape);
-			this.get('renderingService').redrawScene();
+				landscape.save();
+				this.set('modellRepo.modellLandscape', landscape);
+				this.get('renderingService').redrawScene();
+			}else{
+				this.showAlertifyMessage("no communication could be established")
+			}
 		},
 
 		switchComP(){
@@ -521,7 +525,7 @@ export default BaseRoute.extend(AlertifyHandler, {
 		},
 
 		resetRoute() {
-		// your cleanup code here
+			this.set('modellRepo.modellApplication', null);
 		},
 
 		switchLandscape(){

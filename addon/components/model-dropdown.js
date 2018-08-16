@@ -1,8 +1,6 @@
 import Component from '@ember/component';
 import layout from '../templates/components/model-dropdown';
-import Service from '@ember/service';
 import ENV from 'explorviz-frontend/config/environment';
-import FileSaverMixin from 'ember-cli-file-saver/mixins/file-saver';
 import { inject as service } from "@ember/service";
 import AlertifyHandler from 'explorviz-frontend/mixins/alertify-handler';
 
@@ -54,8 +52,7 @@ export default Component.extend(AlertifyHandler, {
 
 	setModellLandscape(nameOfModel){
 		const self = this;
-
-		console.log(nameOfModel.split("-")[0]);
+		
 		this.debug("start landscape-request");
 		this.get("store").queryRecord('landscape', 'modelLandscape/' + nameOfModel.split("-")[0])
 			.then(success, failure).catch(error);
