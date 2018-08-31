@@ -109,38 +109,38 @@ export default Controller.extend({
 						//				- emberModel.get('parent.getDisplayName')					->	undefined
 						//				- emberModel.get('parent.getDisplayName()')					->	undefined
 						let node = emberModel.get('parent').content;
-						document.getElementById('nSN').value = node.get('parent').get('parent').get('name');		
-						document.getElementById('cPS1').value = node.get('parent').get('parent').get('name');		
-						document.getElementById('nNgN').value = node.get('parent').get('name');		
+						document.getElementById('nSN').value = node.get('parent').get('parent').get('name');
+						document.getElementById('cPS1').value = node.get('parent').get('parent').get('name');
+						document.getElementById('nNgN').value = node.get('parent').get('name');
 						document.getElementById('cPNG1').value = node.get('parent').get('name');
 						document.getElementById('nNN').value = node.getDisplayName();
 						document.getElementById('cPN1').value = node.getDisplayName();
-						document.getElementById('nAN').value = emberModel.get('name');		
-						document.getElementById('cPA1').value = emberModel.get('name');		
+						document.getElementById('nAN').value = emberModel.get('name');
+						document.getElementById('cPA1').value = emberModel.get('name');
 						break;
 					case "node":
-						document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('name');		
-						document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');		
-						document.getElementById('nNgN').value = emberModel.get('parent').get('name');		
-						document.getElementById('cPNG1').value = emberModel.get('parent').get('name');		
+						document.getElementById('nSN').value = emberModel.get('parent').get('parent').get('name');
+						document.getElementById('cPS1').value = emberModel.get('parent').get('parent').get('name');
+						document.getElementById('nNgN').value = emberModel.get('parent').get('name');
+						document.getElementById('cPNG1').value = emberModel.get('parent').get('name');
 						document.getElementById('nNN').value = emberModel.getDisplayName();
 						document.getElementById('cPN1').value = emberModel.getDisplayName();
-						document.getElementById('nAN').value = "to be selected";		
-						document.getElementById('cPA1').value = "to be selected";		
+						document.getElementById('nAN').value = "to be selected";
+						document.getElementById('cPA1').value = "to be selected";
 						break;
 					case "nodegroup":
-						document.getElementById('nSN').value = emberModel.get('parent').get('name');		
-						document.getElementById('cPS1').value = emberModel.get('parent').get('name');		
-						document.getElementById('nNgN').value = emberModel.get('name');		
-						document.getElementById('cPNG1').value = emberModel.get('name');		
+						document.getElementById('nSN').value = emberModel.get('parent').get('name');
+						document.getElementById('cPS1').value = emberModel.get('parent').get('name');
+						document.getElementById('nNgN').value = emberModel.get('name');
+						document.getElementById('cPNG1').value = emberModel.get('name');
 						document.getElementById('nNN').value = "to be selected";
 						document.getElementById('cPN1').value = "to be selected";
-						document.getElementById('nAN').value = "to be selected";		
-						document.getElementById('cPA1').value = "to be selected";		
+						document.getElementById('nAN').value = "to be selected";
+						document.getElementById('cPA1').value = "to be selected";
 						break;
 					case "system":
-						document.getElementById('nSN').value = emberModel.get('name');		
-						document.getElementById('cPS1').value = emberModel.get('name');		
+						document.getElementById('nSN').value = emberModel.get('name');
+						document.getElementById('cPS1').value = emberModel.get('name');
 						document.getElementById('nNgN').value = "to be selected";
 						document.getElementById('cPNG1').value = "to be selected";
 						document.getElementById('nNN').value = "to be selected";
@@ -154,42 +154,6 @@ export default Controller.extend({
 				}
 			}
 		});
-
-		//this should be rightclicking and linking it to the second model
-		//TODO: research what rightclicking is in this context
-
-		// this.get('landscapeInteraction').on('contextMenu', function(emberModel) {
-		// 	switch(emberModel.constructor.modelName){
-		// 		case "application":
-		// 			document.getElementById('cPS2').value = emberModel.get('parent').get('parent').get('parent').get('name');		
-		// 			document.getElementById('cPNG2').value = emberModel.get('parent').get('parent').get('name');		
-		// 			document.getElementById('cPN2').value = emberModel.get('parent').get('name');
-		// 			document.getElementById('cPA2').value = emberModel.get('name');		
-		// 			break;
-		// 		case "node":
-		// 			document.getElementById('cPS2').value = emberModel.get('parent').get('parent').get('name');		
-		// 			document.getElementById('cPNG2').value = emberModel.get('parent').get('name');		
-		// 			document.getElementById('cPN2').value = emberModel.get('name');
-		// 			document.getElementById('cPA2').value = "to be selected";		
-		// 			break;
-		// 		case "nodegroup":
-		// 			document.getElementById('cPS2').value = emberModel.get('parent').get('name');		
-		// 			document.getElementById('cPNG2').value = emberModel.get('name');		
-		// 			document.getElementById('cPN2').value = "to be selected";
-		// 			document.getElementById('cPA2').value = "to be selected";		
-		// 			break;
-		// 		case "system":
-		// 			document.getElementById('cPS2').value = emberModel.get('name');		
-		// 			document.getElementById('cPNG2').value = "to be selected";
-		// 			document.getElementById('cPN2').value = "to be selected";
-		// 			document.getElementById('cPA2').value = "to be selected";
-		// 			break;
-		// 		case "applicationcommunication":
-		// 			//alertify or debug or something
-		// 			break;
-		// 	}
-		// });
-
 
 		const applicationInteraction = ApplicationInteraction.create(getOwner(this).ownerInjection());
 		applicationInteraction.handleSingleClick = function(mouse) {
