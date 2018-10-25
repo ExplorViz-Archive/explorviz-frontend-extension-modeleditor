@@ -3,13 +3,13 @@
 This frontend extension adds an architecture model editor to ExplorViz (Work-In-Progress)
 
 ## Installation
-------------------------------------------------------------------------------
+
 ```
 ember install explorviz-frontend-extension-modelleditor
 ```
 
 ## Contributing
-------------------------------------------------------------------------------
+
 ### Installation
 
 * `git clone <repository-url>`
