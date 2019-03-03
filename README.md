@@ -1,5 +1,7 @@
 # explorviz-frontend-extension-modelleditor
 
+## Project Description
+
 This frontend extension adds an architecture model editor to ExplorViz (Work-In-Progress)
 
 ## Installation
