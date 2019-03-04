@@ -3,5 +3,5 @@
       "requiredExtensions": [
         "frontend",
       ],
-      "incompatibleExtensions": [],
+      "incompatibleExtensions": []
 }
