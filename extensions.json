@@ -1,5 +1,5 @@
 {
-      "imgUrl": "img/model-editor.svg",
+      "imgSrc": "model-editor.svg",
       "requiredExtensions": [
         "frontend"
       ],
